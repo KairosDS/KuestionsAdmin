@@ -179,7 +179,7 @@ if (Meteor.isClient) {
 
   Template.navbar.helpers({
     showInsert: function() {
-      return ( Session.get("db") !== "Results" );
+      return ( !( Session.get("db") == "Results" || Session.get("db") == "Tests" )  );
     }
   });
   Template.navbar.events({

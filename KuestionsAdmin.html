@@ -249,10 +249,14 @@
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Title</th>
+						<th>Type</th>
+						<th>Img</th>
+						<th>Description</th>
+						<th>Num.Test</th>
+						<!--<th>Title</th>
 						<th>Name</th>
 						<th>QRand</th>
-						<th>ARand</th>
+						<th>ARand</th>-->
 						<th></th>
 					</tr>
 				</thead>
@@ -260,10 +264,12 @@
 			{{#each testList}}
 				<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
 					<td>{{_id}}</td>
-					<td contenteditable="true" data-field="title">{{title}}</td>
-					<td contenteditable="true" data-field="name">{{name}}</td>
-					<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
-					<td contenteditable="true" data-field="ARand">{{# if ARand }}true{{else}}false{{/if}}</td>
+					<td contenteditable="true" data-field="type">{{type}}</td>
+					<td contenteditable="true" data-field="img">{{img}}</td>
+					<td contenteditable="true" data-field="description">{{description}}</td>
+					<td data-field="numTest">{{numTest}}</td>
+					<!--<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
+					<td contenteditable="true" data-field="ARand">{{# if ARand }}true{{else}}false{{/if}}</td>-->
 					<td><a href="#delete-result" class="btn btn-success deltest">DEL</a></td>
 				</tr>
 			{{/each}}
