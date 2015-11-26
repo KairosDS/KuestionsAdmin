@@ -6,11 +6,14 @@
 	<div class="page-header">
 	  <h1>Kuestions Admin</h1>
 	</div>
-  
-  	<div class="container">
-		{{> main }}
+
+  <div class="container">
+    <div class="pull-right">{{> loginButtons}}</div>
+    {{#if currentUser}}
+		  {{> main }}
+    {{/if}}
 	</div>
-	
+
 </body>
 
 <template name="main">
@@ -365,7 +368,7 @@
 <template name="admin_json">
 	<form>
 		<div class="form-group">
-			<label>DB: 
+			<label>DB:
 				<select>
 					<option value="javascript1">javascript1</option>
 					<option value="javascript2">javascript2</option>
