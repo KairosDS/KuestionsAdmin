@@ -1,7 +1,7 @@
 Kuestions = new Mongo.Collection("kuestions");
 Answers =   new Mongo.Collection("answers");
 Results =   new Mongo.Collection("results");
-Users   =   new Mongo.Collection("users");
+//Users   =   new Mongo.Collection("users");
 KTeam   =   new Mongo.Collection("kteam");
 Tests   =   new Mongo.Collection("tests");
 
@@ -35,9 +35,9 @@ if (Meteor.isClient) {
           field = $(event.target).attr("data-field"),
           value = $(event.target).html(),
           setdb = {};
-      if ( typeof id == "undefined" ){ 
+      if ( typeof id == "undefined" ){
         id = elP.parent().parent().parent().parent().attr("id");
-        setdb = { answers: getAnswers( elP ) }; 
+        setdb = { answers: getAnswers( elP ) };
       } else {
         setdb[field]=value;
       }
@@ -51,7 +51,7 @@ if (Meteor.isClient) {
       elP.popover("show");
       setTimeout( function() { elP.popover("hide"); },1000);
       return false;
-    }        
+    }
   };
 
   var getAnswers = function( elP ) {
@@ -95,7 +95,7 @@ if (Meteor.isClient) {
       $('#alertModal')
         .modal({ backdrop: 'static', keyboard: false })
         .one('click', '.delsure', function() {
-          Tests.remove({_id:id}); 
+          Tests.remove({_id:id});
           $('#alertModal').modal("hide");
         });
     }
@@ -149,7 +149,7 @@ if (Meteor.isClient) {
     }
   });
   Template.admin_team.events({
-    'click tr': selectRow, 
+    'click tr': selectRow,
     'keypress td': updateFn
   });
 
@@ -159,7 +159,7 @@ if (Meteor.isClient) {
     },
     dbTests: function(){
       return ( Session.get("db")=="Tests");
-    }, 
+    },
     dbKuestions: function(){
       return ( Session.get("db")=="Kuestions");
     },
