@@ -35,6 +35,7 @@ if (Meteor.isClient) {
           field = $(event.target).attr("data-field"),
           value = $(event.target).html(),
           setdb = {};
+      id = resolvId(id);
       if ( typeof id == "undefined" ){
         id = elP.parent().parent().parent().parent().attr("id");
         setdb = { answers: getAnswers( elP ) };
@@ -52,6 +53,17 @@ if (Meteor.isClient) {
       setTimeout( function() { elP.popover("hide"); },1000);
       return false;
     }
+  };
+
+  var resolvId = function(id){
+    var patt = new RegExp("ObjectID");
+    if ( patt.test(id) ) {
+      id = id.replace("ObjectID(\"","").replace("\")","");
+      oid = new Meteor.Collection.ObjectID();
+      oid._str = id;
+      id = oid;
+    }
+    return id;
   };
 
   var getAnswers = function( elP ) {
