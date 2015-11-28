@@ -235,11 +235,9 @@
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	      	{{# if showInsert }}
-	        <li><a href="#insert-new-field" class="btn btn-success insert" data-toggle="modal" data-target="#insertModal">Insert New</a></li>
-	        {{/ if }}
-	      </ul>
+	      {{# if showInsert }}
+          <a href="#insert-new-field" class="btn btn-success navbar-btn insert" data-toggle="modal" data-target="#insertModal">Insert New</a></li>
+	      {{/ if }}
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
@@ -273,7 +271,7 @@
 					<td data-field="numTest">{{numTest}}</td>
 					<!--<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
 					<td contenteditable="true" data-field="ARand">{{# if ARand }}true{{else}}false{{/if}}</td>-->
-					<td><a href="#delete-result" class="btn btn-success deltest">DEL</a></td>
+					<td><a href="#delete-result" class="btn btn-danger deltest">DEL</a></td>
 				</tr>
 			{{/each}}
 				</tbody>
@@ -334,7 +332,7 @@
 						<td>{{email}}</td>
 						<td>{{score}}</td>
 						<td>{{time}}</td>
-						<td><a href="#delete-result" class="btn btn-success deluser">DEL</a></td>
+						<td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
 					</tr>
 				{{/each}}
 				</tbody>
