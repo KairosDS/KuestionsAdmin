@@ -24,7 +24,7 @@
 			<li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
 			<li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
 			<li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
-			<li role="presentation"><a href="#json" aria-controls="json" role="tab" data-toggle="tab">JSON</a></li>
+			<li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -49,8 +49,8 @@
 				{{> navbar}}
   				{{> admin_team}}
 			</div>
-			<div role="tabpanel" class="tab-pane" id="json">
-				<h2>INSERT JSON</h2>
+			<div role="tabpanel" class="tab-pane" id="loadkuestions">
+				<h2>LOAD KUESTIONS JSON</h2>
   				{{> admin_json}}
 			</div>
 		</div>
@@ -321,6 +321,7 @@
 					{{#each resultsFieldNames}}
 						<th>{{this}}</th>
 					{{/each}}
+					<th></th><th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -333,6 +334,7 @@
 						<td>{{score}}</td>
 						<td>{{time}}</td>
 						<td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
+						<td><a href="#recalc-result" class="btn btn-warning recalcresult" data-user="{{user}}">RECALC</a></td>
 					</tr>
 				{{/each}}
 				</tbody>
@@ -372,23 +374,15 @@
 <template name="admin_json">
 	<form>
 		<div class="form-group">
-			<label>DB:
-				<select>
-					<option value="javascript1">javascript1</option>
-					<option value="javascript2">javascript2</option>
-					<option value="javascript3">javascript3</option>
-					<option value="q-adopter1" >q-adopter1</option>
-					<option value="q-adopter2" >q-adopter2</option>
-					<option value="q-adopter3" >q-adopter3</option>
-					<option value="friki">friki</option>
-				</select>
-			</label>
+			<label class="col-sm-1 control-label">TEST:</label>
 		</div>
-		<div class="form-group">
-			<textarea></textarea>
-		</div>
-		<div class="form-group">
-			<button type="button" class="btn btn-success" name="insert">Insert</button>
+		<div class="form-group col-sm-6">
+		 	<div id="uploadLayer">
+				{{> upload_bootstrap callback=uploaded}}
+			</div>
+			<div class="form-group hide" id="loaddbLayer">
+				<button type="button" class="col-sm-3 btn btn-success" name="insert">LOAD {{json_filename}} in DB</button>
+			</div>
 		</div>
 	</form>
 </template>
