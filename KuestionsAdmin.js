@@ -166,6 +166,58 @@ if (Meteor.isClient) {
           }
         }
       ); 
+    },
+    'click .showuser': function(){
+      Session.set( "answers_id", this._id );
+      Session.set( "answers_username", this.username );
+      Session.set( "answers_email", this.email );
+      Session.set( "answers_score", this.score );
+      Session.set( "answers_time", this.time );
+      Session.set( "answers_test", this.user.substring(17) );
+      Session.set( "answers_testId", this.user );
+
+      $('#showUserModal').modal({ backdrop: 'static', keyboard: false });
+    }
+  });
+
+  Template.showUserModal.helpers({
+    username: function(){
+      return Session.get("answers_username");
+    },
+    id: function(){
+      return Session.get("answers_id");
+    },
+    email: function(){
+      return Session.get("answers_email");
+    },
+    score: function(){
+      return Session.get("answers_score");
+    },
+    time: function(){
+      return Session.get("answers_time");
+    },
+    test:function(){
+      return Session.get("answers_test");
+    },
+    testId: function(){
+      return Session.get("answers_testId" );
+    },
+    answersFieldNames: function(){
+      var fields = Answers.findOne();
+      return ( fields )?Object.keys( fields ):[];
+    },
+    userAnswers: function(){
+      var a = Answers.find({"test":Session.get( "answers_test"), "user":Session.get("answers_testId")}).fetch(),
+          b = Kuestions.find({"test":Session.get( "answers_test")}).fetch(),
+          c = [];
+      for( var i=0; i<a.length; i++ ) {
+        c[i] = {};
+        c[i].question = b[i].question;
+        c[i].answerOK = b[i].answers.map(function(a){ return ( a.value==1 )?a.text:""; } ).join( "" );
+        c[i].answerTXT = a[i].answerTXT;
+        c[i].correcto = (c[i].answerOK == c[i].answerTXT)?"success":"danger";
+      }
+      return c;
     }
   });
 

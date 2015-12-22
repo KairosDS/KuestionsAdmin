@@ -58,6 +58,7 @@
 
 	{{> insertModal}}
 	{{> alertModal}}
+	{{> showUserModal}}
 </template>
 
 <template name="alertModal">
@@ -108,6 +109,40 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+</template>
+
+<template name="showUserModal">
+	<div id="showUserModal" class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Answers from {{username}}</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<div>{{username}} - {{email}} - {{score}} - {{time}} - {{test}}</div>
+	      	<table class="table">
+				<thead>
+					<tr>
+						<th>PREGUNTA</th>
+						<th>RESPUESTA CORRECTA</th>
+						<th>RESPUESTA USUARIO</th>
+					</tr>
+				</thead>
+				<tbody>
+		      		{{#each userAnswers}}
+					<tr id="{{_id}}" class="{{correcto}}">
+						<td>{{question}}</td>
+						<td>{{answerOK}}</td>
+						<td>{{answerTXT}}</td>
+					</tr>
+					{{/each}}
+				</tbody>
+	      	</table>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </template>
 
 <template name="insertTestsForm">
@@ -329,7 +364,7 @@
 					<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
 						<td>{{_id}}</td>
 						<td>{{user}}</td>
-						<td>{{username}}</td>
+						<td><a href="#showuser" id="showuser_{{id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
 						<td>{{email}}</td>
 						<td>{{score}}</td>
 						<td>{{time}}</td>
