@@ -212,7 +212,9 @@ if (Meteor.isClient) {
           c = [];
       for( var i=0; i<a.length; i++ ) {
         c[i] = {};
+        b[i] = b[i] || {};
         c[i].question = b[i].question || "";
+        b[i].answers = b[i].answers || [""];
         c[i].answerOK = b[i].answers.map(function(a){ return ( a.value==1 )?a.text:""; } ).join( "" ) || "";
         c[i].answerTXT = a[i].answerTXT || "";
         c[i].correcto = (c[i].answerOK == c[i].answerTXT && c[i].answerOK !== "")?"success":"danger";
