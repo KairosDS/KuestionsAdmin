@@ -154,6 +154,18 @@ if (Meteor.isClient) {
           }
           $('#alertModal').modal("hide");
         });
+    },
+    'click .recalcresult':function(){
+      Meteor.call( 
+        "recalcResults", 
+        {userTest:this.user}, 
+        function( err, response ) { 
+          if ( err) { console.log( err, response ); 
+          } else { 
+            console.log( "RECALCULATED" );
+          }
+        }
+      ); 
     }
   });
 
@@ -169,6 +181,28 @@ if (Meteor.isClient) {
   Template.admin_team.events({
     'click tr': selectRow,
     'keypress td': updateFn
+  });
+
+  Template.admin_json.helpers({
+    uploaded:function(){
+      return {
+        finished:function( index,fileInfo,context){
+          console.log( "TERMINO" );
+          Session.set( "jsonFileName", fileInfo );
+        }
+      };
+    },
+    json_filename:function(){
+      var jf = Session.get("jsonFileName");
+      if ( jf !== "" ) {
+        $("#uploadLayer").show();
+        $("#loaddbLayer").hide();
+      } else {
+        $("#uploadLayer").hide();
+        $("#loaddbLayer").show();
+      }
+      return jf;
+    }
   });
 
   Template.insertModal.helpers({
@@ -203,16 +237,5 @@ if (Meteor.isClient) {
   Template.navbar.events({
     'click .insert': function( e ){
     }
-  });
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-    Answers.allow({
-      remove:function(userId,doc){
-        return true;
-      }
-    });
   });
 }
