@@ -48,11 +48,22 @@ if (Meteor.isServer) {
         var total = Answers.find({user:args.userTest}).count();
         //Results.update( { "user":args.userTest }, { $set: { "score":result + " de " + total } } );
         console.log( "Recalc result: " + result + " de " + total + " " + args.userTest );  
-        var r = Results.update( { "user":args.userTest }, { $set: {"score":result + " de " + total} } ); 
+        r = Results.update( { "user":args.userTest }, { $set: {"score":result + " de " + total} } ); 
         return {result:r, recalc:"OK"};
       //} else {
       //  return "Este test ya lo realizaste y no es posible hacerlo mas de una vez. Si lo superaste nos pondremos en contacto contigo. Muchas gracias!";
       //}
+    },
+    delUserTest: function( args ) {
+      var id = args.id,
+          user_test = Results.find({_id:id}).fetch()[0].user;
+      Results.remove({_id:id});
+      var answerListToDel = Answers.find({user:user_test}).fetch();
+      for ( var i=0; i<answerListToDel.length;i++) {
+        Answers.remove({_id:answerListToDel[i]._id});  
+        console.log( "Delete answer " + answerListToDel[i]._id + " from user "+ id );
+      }
+      return { ok:true, n:answerListToDel.length };
     }
   });
 }

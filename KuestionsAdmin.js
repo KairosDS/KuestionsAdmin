@@ -145,13 +145,16 @@ if (Meteor.isClient) {
       $('#alertModal')
         .modal({ backdrop: 'static', keyboard: false })
         .one('click', '.delsure', function() {
-          var user_test = Results.find({_id:id}).fetch()[0].user;
-          Results.remove({_id:id});
-          var answerListToDel = Answers.find({user:user_test}).fetch();
-          for ( var i=0; i<answerListToDel.length;i++) {
-            Answers.remove({_id:answerListToDel[i]._id});  
-            console.log( "Delete answer " + answerListToDel[i]._id + " from user "+ id );
-          }
+          Meteor.call( 
+            'delUserTest', 
+            {id:id},
+            function(err, response ) { 
+              if ( err) { console.log( err, response ); 
+              } else { 
+                console.log( response );
+              }
+            }
+          );
           $('#alertModal').modal("hide");
         });
     },
