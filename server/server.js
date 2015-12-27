@@ -63,6 +63,7 @@ if (Meteor.isServer) {
         Answers.remove({_id:answerListToDel[i]._id});  
         console.log( "Delete answer " + answerListToDel[i]._id + " from user "+ id );
       }
+      Answers.remove({user:Meteor.userId()});
       return { ok:true, n:answerListToDel.length };
     }
   });
