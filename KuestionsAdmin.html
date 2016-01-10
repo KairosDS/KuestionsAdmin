@@ -31,27 +31,23 @@
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="tests">
 				<h2>Tests</h2>
-				{{> navbar}}
 				{{> admin_tests}}
 			</div>
 			<div role="tabpanel" class="tab-pane" id="kuestions">
 				<h2>Kuestions List</h2>
-				{{> navbar}}
-  				{{> admin_kuestions}}
+  			{{> admin_kuestions}}
 			</div>
 			<div role="tabpanel" class="tab-pane" id="results">
-				<h2>Results List</h2>
-				{{> navbar}}
-  				{{> admin_results}}
+				<h2>Results</h2>
+  			{{> admin_results}}
 			</div>
 			<div role="tabpanel" class="tab-pane" id="kteam">
 				<h2>Kairos Team List</h2>
-				{{> navbar}}
-  				{{> admin_team}}
+  			{{> admin_team}}
 			</div>
 			<div role="tabpanel" class="tab-pane" id="loadkuestions">
 				<h2>LOAD KUESTIONS JSON</h2>
-  				{{> admin_json}}
+  			{{> admin_json}}
 			</div>
 		</div>
 	</div>
@@ -94,8 +90,8 @@
 	        	{{#if dbTests}}
 	        		{{> insertTestsForm}}
 	        	{{/if}}
-				{{#if dbKuestions}}
-					{{> insertKuestionsForm}}
+						{{#if dbKuestions}}
+							{{> insertKuestionsForm}}
 	        	{{/if}}
 	        	{{#if dbTeam}}
 	        		{{> insertTeamForm}}
@@ -265,20 +261,22 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">Actions: </a>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      {{# if showInsert }}
-          <a href="#insert-new-field" class="btn btn-success navbar-btn insert" data-toggle="modal" data-target="#insertModal">Insert New</a>
-	      {{/ if }}
+	    	<form class="form-inline">
+  				<div class="form-group">
+	      		{{{actions}}}
+	      	</div>
+	      </form>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
 </template>
 
 <template name="admin_tests">
+	{{> navbar navbar="tests"}}
 	<div class="row">
 		<div class="table-responsive">
 			<table class="table">
@@ -317,6 +315,7 @@
 
 
 <template name="admin_kuestions">
+	{{> navbar navbar="kuestions"}}
 	<div class="row">
 		<div class="table-responsive">
 			<table class="table">
@@ -349,36 +348,43 @@
 
 <template name="admin_results">
 	<div class="row">
-		<div class="table-responsive">
-			<table class="table">
-				<thead>
-					<tr>
-					{{#each resultsFieldNames}}
-						<th>{{this}}</th>
-					{{/each}}
-					<th></th><th></th>
-					</tr>
-				</thead>
-				<tbody>
-				{{#each resultsList}}
-					<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-						<td>{{_id}}</td>
-						<td>{{user}}</td>
-						<td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
-						<td>{{email}}</td>
-						<td>{{score}}</td>
-						<td>{{time}}</td>
-						<td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
-						<td><a href="#recalc-result" class="btn btn-warning recalcresult" data-user="{{user}}">RECALC</a></td>
-					</tr>
+		{{> navbar navbar="results"}}
+		{{> table_results }}
+	</div>
+</template>
+
+<template name="table_results">
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+				{{#each resultsFieldNames}}
+					<th>{{this}}</th>
 				{{/each}}
-				</tbody>
-			</table>
-		</div>
+				<th></th><th></th>
+				</tr>
+			</thead>
+			<tbody>
+			{{#each resultsList}}
+				<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+					<td>{{_id}}</td>
+					<td>{{user}}</td>
+					<td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
+					<td>{{email}}</td>
+					<td>{{score}}</td>
+					<td>{{time}}</td>
+					<td><a href="#bydate" class="bydate" data-toggle="modal" data-trigger="manual">{{date}}</a></td>
+					<td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
+					<td><a href="#recalc-result" class="btn btn-warning recalcresult" data-user="{{user}}">RECALC</a></td>
+				</tr>
+			{{/each}}
+			</tbody>
+		</table>
 	</div>
 </template>
 
 <template name="admin_team">
+	{> navbar navbar="team"}}
 	<div class="row">
 		<div class="table-responsive">
 			<table class="table">
@@ -407,6 +413,7 @@
 </template>
 
 <template name="admin_json">
+	{{> navbar navbar="json"}}
 	<form>
 		<div class="form-group">
 			<label class="col-sm-1 control-label">TEST:</label>

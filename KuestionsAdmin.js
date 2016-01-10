@@ -1,7 +1,6 @@
 Kuestions = new Mongo.Collection("kuestions");
 Answers =   new Mongo.Collection("answers");
 Results =   new Mongo.Collection("results");
-//Users   =   new Mongo.Collection("users");
 KTeam   =   new Mongo.Collection("kteam");
 Tests   =   new Mongo.Collection("tests");
 
@@ -10,6 +9,7 @@ if (Meteor.isClient) {
   Session.set( "kuestionsFilter", "{}");
   Session.set( "resultsFilter", "{}");
   Session.set( "db", "Tests" );
+  Session.set( "filter",{} );
 
   $.fn.serializeObject = function () {
     var o = {};
@@ -127,15 +127,21 @@ if (Meteor.isClient) {
     'keypress td': updateFn
   });
 
-  Template.admin_results.helpers({
+  Template.table_results.helpers({
     resultsList : function () {
-      return Results.find({}).fetch();
+      var condition = Session.get( "filter" );
+      var r = Results.find(condition).fetch();
+      for (var k in r) {
+        r[k].date = r[k].date.toDateString();
+      }
+      return r;
     },
     resultsFieldNames: function(){
       var fields = Results.findOne();
       return ( fields )?Object.keys( fields ):[];
     }
   });
+
   Template.admin_results.events({
     'click tr': selectRow,
     'keypress td': updateFn,
@@ -287,12 +293,97 @@ if (Meteor.isClient) {
   });
 
   Template.navbar.helpers({
-    showInsert: function() {
-      return ( !( Session.get("db") == "Results" || Session.get("db") == "Tests" )  );
+    actions: function() {
+      var actions = "";
+
+      if ( this.navbar == "results" ) { 
+        var users =_.uniq(Results.find({}, {
+          sort: {username: 1}, fields: {username: true}
+        }).fetch().map(function(x) { return x.username; }), true);
+        var uO = "";
+        console.log(users);
+        for (var k in users){
+          uO += "<option value='"+users[k]+"'>"+users[k]+"</option>";
+        }
+        var tests = Tests.find({}).fetch();
+        var tO = "";
+        for (k in tests){
+          for (var k2 in tests[k].tests){
+            tO += "<option value='"+tests[k].tests[k2].name+"'>"+tests[k].tests[k2].name+"</option>";
+          }
+        }
+        actions += "<form id='filterForm'><label>Filter by:</label> ";
+        actions += '<div class="form-control input-daterange input-group" id="datefilter">';
+        actions += '<input type="text" class="input-sm form-control datefilter" id="datefilterstart" name="datefilterstart" placeholder="date filter start" />';
+        actions += '<span class="input-group-addon">to</span>';
+        actions += '<input type="text" class="input-sm form-control datefilter" id="datefilterend" name="datefilterend" placeholder="date filter end" />';
+        actions += '</div> ';
+        actions += '<select class="form-control" id="userfilter"><option>User Filter</option>'+uO+'</select> ';
+        actions += '<select class="form-control" id="testfilter"><option>Test Filter</option>'+tO+'</select> ';
+        actions += '<button class="btn btn-info" id="cleanFilter">Clean Filter</button></form>';
+      }
+      return actions;
     }
   });
+  Template.navbar.rendered=function() {
+    if ( $('#datefilter') ) { 
+      $('#datefilter.input-daterange').datepicker({
+        format: "dd/mm/yyyy",
+        weekStart: 1,
+        clearBtn: true,
+        language: "es",
+        orientation: "top auto",
+        autoclose: true,
+        todayHighlight: true
+      });
+    }
+  };
   Template.navbar.events({
     'click .insert': function( e ){
+    },
+    'click #cleanFilter': function(){
+      $("#filterForm")[0].reset();
+      Session.set( "filter", {} );
+      return false;
+    },
+    'change .datefilter':function( e ){
+      var dS = $("#datefilterstart").val();
+      var dE = $("#datefilterend").val();
+      var filterNow = Session.get( "filter" );
+      if ( dS !== "" && dE !== "" ) {
+      dS = dS.split("/");
+      dE = dE.split("/");
+      var dateStart = new Date( dS[1]+"-"+dS[0]+"-"+dS[2]);
+      var dateEnd = new Date( dE[1]+"-"+dE[0]+"-"+dE[2]);
+      dateEnd = new Date( dateEnd.setDate( dateEnd.getDate() + 1 ) );
+      console.log ("datefilter changed " + dateStart + " , " + dateEnd );
+        filterNow.date = { $gte: dateStart, $lt: dateEnd };
+      } else {
+        delete(filterNow.date);
+      }
+      Session.set( "filter", filterNow );
+    },
+    'change #userfilter':function( e ){
+      console.log( "userfilter changed " + e.target.value );
+      var user = e.target.value;
+      var filterNow = Session.get( "filter" );
+      if ( user !== "User Filter" ) {
+        filterNow.username = user;
+      } else {
+        delete(filterNow.username);
+      }
+      Session.set( "filter", filterNow );
+    },
+    'change #testfilter': function( e ){
+      console.log( "testfilter changed" + e.target.value );
+      var test = e.target.value;
+      var filterNow = Session.get( "filter" );
+      if ( test !== "Test Filter" ) {
+        filterNow.user = {'$regex': test+'$'};
+      } else {
+        delete(filterNow.user);
+      }
+      Session.set( "filter", filterNow );
     }
   });
 }

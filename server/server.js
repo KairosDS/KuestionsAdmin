@@ -25,11 +25,15 @@ if (Meteor.isServer) {
       console.log( "Recalculando resultado para usuario " + args.userTest );
       // Calc score
       var userTest = args.userTest,
-          r = Answers.find({"user":args.userTest}).fetch(),
+          test = userTest.substr( 17 ),
+          kuestionsIDs = Kuestions.find({test:test},{field:"id"}).fetch().map(function(a){ return a._id.toString().replace("ObjectID(\"","").replace("\")",""); }),
+          r = Answers.find({"user":args.userTest},{answerID:{$in:kuestionsIDs}}).fetch(),
           idType = ( Kuestions.find( { _id: { $type: 2 } } ).count() > 0 ),
           objId = new Meteor.Collection.ObjectID(), 
           result = 0;
+      //console.log( kuestionsIDs );
       console.log( "ANSWER USER+TEST: " + args.userTest );
+      Answers.remove({"user":args.userTest, answerID:{$nin:kuestionsIDs}});
       for ( i=0; i<r.length; i++ ){
         var id = r[i].answerID,
             oid , a;
