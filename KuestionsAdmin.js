@@ -301,7 +301,7 @@ if (Meteor.isClient) {
           sort: {username: 1}, fields: {username: true}
         }).fetch().map(function(x) { return x.username; }), true);
         var uO = "";
-        console.log(users);
+        //console.log(users);
         for (var k in users){
           uO += "<option value='"+users[k]+"'>"+users[k]+"</option>";
         }
