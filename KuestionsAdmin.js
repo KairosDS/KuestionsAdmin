@@ -11,6 +11,8 @@ if (Meteor.isClient) {
   Session.set( "db", "Tests" );
   Session.set( "filter",{} );
 
+  var firstClickDatePicker = true;
+
   $.fn.serializeObject = function () {
     var o = {};
     var a = this.serializeArray();
@@ -327,15 +329,7 @@ if (Meteor.isClient) {
   });
   Template.navbar.rendered=function() {
     if ( $('#datefilter') ) { 
-      $('#datefilter.input-daterange').datepicker({
-        format: "dd/mm/yyyy",
-        weekStart: 1,
-        clearBtn: true,
-        language: "es",
-        orientation: "top auto",
-        autoclose: true,
-        todayHighlight: true
-      });
+      
     }
   };
   Template.navbar.events({
@@ -345,6 +339,22 @@ if (Meteor.isClient) {
       $("#filterForm")[0].reset();
       Session.set( "filter", {} );
       return false;
+    },
+    'click #datefilter.input-daterange':function(){
+      if (firstClickDatePicker) {
+        firstClickDatePicker = false;
+        $('#datefilter.input-daterange').datepicker({
+          format: "dd/mm/yyyy",
+          weekStart: 1,
+          clearBtn: true,
+          language: "es",
+          orientation: "top auto",
+          autoclose: true,
+          todayHighlight: true
+        });
+        $("#datefilterstart").trigger ("blur");
+        $("#datefilterstart").trigger ("click");
+      }
     },
     'change .datefilter':function( e ){
       var dS = $("#datefilterstart").val();
