@@ -23,6 +23,7 @@
 			<li role="presentation" class="active"><a href="#tests" aria-controls="tests" role="tab" data-toggle="tab">Tests</a></li>
 			<li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
 			<li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
+      <li role="presentation"><a href="#ranking" aria-controls="results" role="tab" data-toggle="tab">Ranking</a></li>
 			<li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
 			<li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
 		</ul>
@@ -41,6 +42,10 @@
 				<h2>Results</h2>
   			{{> admin_results}}
 			</div>
+      <div role="tabpanel" class="tab-pane" id="ranking">
+        <h2>Ranking</h2>
+        {{> admin_ranking}}
+      </div>
 			<div role="tabpanel" class="tab-pane" id="kteam">
 				<h2>Kairos Team List</h2>
   			{{> admin_team}}
@@ -117,23 +122,23 @@
 	      </div>
 	      <div class="modal-body">
 	      	<div>{{username}} - {{email}} - {{score}} - {{time}} - {{test}}</div>
-	      	<table class="table">
-				<thead>
-					<tr>
-						<th>PREGUNTA</th>
-						<th>RESPUESTA CORRECTA</th>
-						<th>RESPUESTA USUARIO</th>
-					</tr>
-				</thead>
-				<tbody>
-		      		{{#each userAnswers}}
-					<tr id="{{_id}}" class="{{correcto}}">
-						<td>{{question}}</td>
-						<td>{{answerOK}}</td>
-						<td>{{answerTXT}}</td>
-					</tr>
-					{{/each}}
-				</tbody>
+	      	<table class="table table-condensed table-hover">
+    				<thead>
+    					<tr>
+    						<th>PREGUNTA</th>
+    						<th>RESPUESTA CORRECTA</th>
+    						<th>RESPUESTA USUARIO</th>
+    					</tr>
+    				</thead>
+    				<tbody>
+    		      		{{#each userAnswers}}
+    					<tr id="{{_id}}" class="{{correcto}}">
+    						<td>{{question}}</td>
+    						<td>{{answerOK}}</td>
+    						<td>{{answerTXT}}</td>
+    					</tr>
+    					{{/each}}
+    				</tbody>
 	      	</table>
 	      </div>
 	    </div>
@@ -279,10 +284,10 @@
 	{{> navbar navbar="tests"}}
 	<div class="row">
 		<div class="table-responsive">
-			<table class="table">
+			<table class="table table-condensed table-hover">
 				<thead>
 					<tr>
-						<th>ID</th>
+						<th><!--ID--></th>
 						<th>Type</th>
 						<th>Img</th>
 						<th>Description</th>
@@ -297,7 +302,7 @@
 				<tbody>
 			{{#each testList}}
 				<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-					<td>{{_id}}</td>
+					<td><!--{{_id}}--></td>
 					<td contenteditable="true" data-field="type">{{type}}</td>
 					<td contenteditable="true" data-field="img">{{img}}</td>
 					<td contenteditable="true" data-field="description">{{description}}</td>
@@ -318,7 +323,7 @@
 	{{> navbar navbar="kuestions"}}
 	<div class="row">
 		<div class="table-responsive">
-			<table class="table">
+			<table class="table table-condensed table-hover">
 				<thead>
 					<tr>
 					{{#each kuestionsFieldNames}}
@@ -329,7 +334,7 @@
 				<tbody>
 				{{#each kuestionsList}}
 					<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-						<td>{{_id}}</td>
+						<td><!--{{_id}}--></td>
 						<td contenteditable="true" data-field="test">{{test}}</td>
 						<td contenteditable="true" data-field="question">{{question}}</td>
 						<td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
@@ -355,7 +360,7 @@
 
 <template name="table_results">
 	<div class="table-responsive">
-		<table class="table">
+		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
 				{{#each resultsFieldNames}}
@@ -367,7 +372,7 @@
 			<tbody>
 			{{#each resultsList}}
 				<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-					<td>{{_id}}</td>
+					<td><!--{{_id}}--></td>
 					<td>{{user}}</td>
 					<td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
 					<td>{{email}}</td>
@@ -383,11 +388,42 @@
 	</div>
 </template>
 
+<template name="admin_ranking">
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th><a href="#" class="resultFilter" id="result_js">JAVASCRIPT</a></th>
+            <th><a href="#" class="resultFilter" id="result_qa">ARQUITECTO</a></th>
+            <th><a href="#" class="resultFilter" id="result_tg">TESTING</a></th>
+            <th><a href="#" class="resultFilter" id="result_hc">HTML/CSS</a></th>
+            <th><a href="#" class="resultFilter" id="result_fk">FRIKI</a></th>
+          </tr>
+        </thead>
+        <tbody>
+        {{#each resultsList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td>{{username}}</td>
+            <td class="{{jsClass}}">{{result_js}}%</td>
+            <td class="{{qaClass}}">{{result_qa}}%</td>
+            <td class="{{tgClass}}">{{result_tg}}%</td>
+            <td class="{{hcClass}}">{{result_hc}}%</td>
+            <td class="{{fkClass}}">{{result_fk}}%</td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
 <template name="admin_team">
 	{{> navbar navbar="team"}}
 	<div class="row">
 		<div class="table-responsive">
-			<table class="table">
+			<table class="table table-condensed table-hover">
 				<thead>
 					<tr>
 					{{#each teamFieldNames}}
@@ -398,7 +434,7 @@
 				<tbody>
 				{{#each teamList}}
 					<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-						<td>{{_id}}</td>
+						<td><!--{{_id}}--></td>
 						<td contenteditable="true" data-field="name">{{name}}</td>
 						<td contenteditable="true" data-field="description">{{description}}</td>
 						<td contenteditable="true" data-field="image">{{image}}</td>

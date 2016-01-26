@@ -48,6 +48,9 @@ if (Meteor.isServer) {
       timeToComplete = 0;
       // Guardamos en result
 
+      // RECALC RANKING
+      Meteor.call("calcAllRankings",{},function(err, response){console.log(response);});
+
       //if ( !Results.find( { "user":args.userTest } ).count() ) {
         var total = Answers.find({user:args.userTest}).count();
         //Results.update( { "user":args.userTest }, { $set: { "score":result + " de " + total } } );
@@ -69,6 +72,35 @@ if (Meteor.isServer) {
       }
       Answers.remove({user:Meteor.userId()});
       return { ok:true, n:answerListToDel.length };
+    },
+    calcAllRankings: function(args) {
+      var res, username, rt, el, test, s, rN;
+      var percents = {
+        "javascript1":35, "javascript2":60, "polymer":5,
+        "Arquitecto":100, 
+        "Testing":100,
+        "design":100,
+        "friki":100
+      };
+      var resName = { "javascript1":"js", "javascript2":"js", "polymer":"js", "Arquitecto":"qa", "Testing":"tg", "design":"hc", "friki":"fk" };
+
+      var u = Results.find({}).fetch();
+      var users = Object.keys( _.groupBy(_.pluck(u, 'username')) );
+
+      for ( var j=0;j<users.length;j++){
+        username = users[j];
+        res = Results.find({"username":username}).fetch();
+        rt = { "js":0, "qa":0, "tg":0, "hc":0, "fk":0 };
+        for( i=0; i<res.length; i++){
+          el = res[i];
+          test = el.user.substr(17);
+          s = el.score.split(" de ");
+          rN = resName[test]; 
+          rt[rN] += Math.floor( 100 * percents[test] * s[0] / s[1], 2 ) / 100;
+        }
+        Ranking.upsert({username:username},{username:username,result_js:rt.js.toFixed(2), result_qa:rt.qa.toFixed(2), result_tg:rt.tg.toFixed(2), result_hc:rt.hc.toFixed(2), result_fk:rt.fk.toFixed(2) });
+      }
+      return "-> " + users.length;
     }
   });
 }

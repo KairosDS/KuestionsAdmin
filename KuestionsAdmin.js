@@ -1,6 +1,7 @@
 Kuestions = new Mongo.Collection("kuestions");
 Answers =   new Mongo.Collection("answers");
 Results =   new Mongo.Collection("results");
+Ranking   = new Mongo.Collection("ranking");
 KTeam   =   new Mongo.Collection("kteam");
 Tests   =   new Mongo.Collection("tests");
 
@@ -10,8 +11,20 @@ if (Meteor.isClient) {
   Session.set( "resultsFilter", "{}");
   Session.set( "db", "Tests" );
   Session.set( "filter",{} );
+  Session.set( "filterRanking","" );
 
   var firstClickDatePicker = true;
+  var dynamicNumberSort = function(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        var result = (parseFloat(a[property]) < parseFloat(b[property])) ? -1 : (parseFloat(a[property]) > parseFloat(b[property])) ? 1 : 0;
+        return result * sortOrder;
+    };
+  };
 
   $.fn.serializeObject = function () {
     var o = {};
@@ -191,6 +204,39 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.admin_ranking.helpers({
+    resultsList:function(){
+      var R = Ranking.find({}).fetch();
+      for( var k in R ) {
+        R[k].jsClass = (R[k].result_js > 80)?"success":(R[k].result_js > 60)?"warning":(R[k].result_js > 0)?"danger":"";
+        R[k].qaClass = (R[k].result_qa > 80)?"success":(R[k].result_qa > 60)?"warning":(R[k].result_qa > 0)?"danger":"";
+        R[k].tgClass = (R[k].result_tg > 80)?"success":(R[k].result_tg > 60)?"warning":(R[k].result_tg > 0)?"danger":"";
+        R[k].hcClass = (R[k].result_hc > 80)?"success":(R[k].result_hc > 60)?"warning":(R[k].result_hc > 0)?"danger":"";
+        R[k].frClass = (R[k].result_fk > 80)?"success":(R[k].result_fk > 60)?"warning":(R[k].result_fk > 0)?"danger":"";
+      }
+      if ( Session.get("filterRanking") !== "" ) {
+        R.sort(dynamicNumberSort(Session.get("filterRanking")));
+      }
+      return R;
+    },
+    resultsFieldNames: function(){
+      var fields = Ranking.findOne({});
+      return ( fields )?Object.keys( fields ):[];
+    }
+  });
+  Template.admin_ranking.events({
+    'click .resultFilter':function(e){
+      var id = e.target.id;
+      if ( Session.get("filterRanking") === e.target.id ) {
+        Session.set("filterRanking","-"+id);
+      } else if ( Session.get("filterRanking") === ("-"+e.target.id) ) {
+        Session.set("filterRanking","");
+      } else {
+        Session.set("filterRanking",id);
+      }
+    }
+  });
+
   Template.showUserModal.helpers({
     username: function(){
       return Session.get("answers_username");
@@ -328,9 +374,7 @@ if (Meteor.isClient) {
     }
   });
   Template.navbar.rendered=function() {
-    if ( $('#datefilter') ) { 
-      
-    }
+
   };
   Template.navbar.events({
     'click .insert': function( e ){
