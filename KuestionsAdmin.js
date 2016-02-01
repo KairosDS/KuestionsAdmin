@@ -1,79 +1,87 @@
 Kuestions = new Mongo.Collection("kuestions");
-Answers =   new Mongo.Collection("answers");
-Results =   new Mongo.Collection("results");
-Ranking   = new Mongo.Collection("ranking");
-KTeam   =   new Mongo.Collection("kteam");
-Tests   =   new Mongo.Collection("tests");
+Answers = new Mongo.Collection("answers");
+Results = new Mongo.Collection("results");
+Ranking = new Mongo.Collection("ranking");
+KTeam = new Mongo.Collection("kteam");
+Tests = new Mongo.Collection("tests");
 
 
 if (Meteor.isClient) {
-  Session.set( "kuestionsFilter", "{}");
-  Session.set( "resultsFilter", "{}");
-  Session.set( "db", "Tests" );
-  Session.set( "filter",{} );
-  Session.set( "filterRanking","" );
+  Session.set("kuestionsFilter", "{}");
+  Session.set("resultsFilter", "{}");
+  Session.set("db", "Tests");
+  Session.set("filter", {});
+  Session.set("filterRanking", "");
 
   var firstClickDatePicker = true;
   var dynamicNumberSort = function(property) {
     var sortOrder = 1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
+    if (property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
     }
-    return function (a,b) {
-        var result = (parseFloat(a[property]) < parseFloat(b[property])) ? -1 : (parseFloat(a[property]) > parseFloat(b[property])) ? 1 : 0;
-        return result * sortOrder;
+    return function(a, b) {
+      var result = (parseFloat(a[property]) < parseFloat(b[property])) ? -1 : (parseFloat(a[property]) > parseFloat(b[property])) ? 1 : 0;
+      return result * sortOrder;
     };
   };
 
-  $.fn.serializeObject = function () {
+  $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
-    $.each(a, function () {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
+    $.each(a, function() {
+      if (o[this.name] !== undefined) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
         }
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
     });
     return o;
   };
 
-  var updateFn = function( e ){
+  var updateFn = function(e) {
     var code = e.keyCode || e.which;
-    if(code == 13) {
+    if (code == 13) {
       var elP = $(event.target.parentElement),
-          id = elP.attr("id"),
-          field = $(event.target).attr("data-field"),
-          value = $(event.target).html(),
-          setdb = {};
+        id = elP.attr("id"),
+        field = $(event.target).attr("data-field"),
+        value = $(event.target).html(),
+        setdb = {};
       id = resolvId(id);
-      if ( typeof id == "undefined" ){
+      if (typeof id == "undefined") {
         id = elP.parent().parent().parent().parent().attr("id");
-        setdb = { answers: getAnswers( elP ) };
+        setdb = {
+          answers: getAnswers(elP)
+        };
       } else {
-        setdb[field]=value;
+        setdb[field] = value;
       }
       $(event.target).blur();
-      if ( window[Session.get("db")].update({_id:id}, {$set: setdb}) ) {
+      if (window[Session.get("db")].update({
+          _id: id
+        }, {
+          $set: setdb
+        })) {
         $(event.target).html("");
         elP.attr("data-content", "Actualización correcta");
       } else {
         elP.attr("data-content", "Hubo un problema actualizando.");
       }
       elP.popover("show");
-      setTimeout( function() { elP.popover("hide"); },1000);
+      setTimeout(function() {
+        elP.popover("hide");
+      }, 1000);
       return false;
     }
   };
 
-  var resolvId = function(id){
+  var resolvId = function(id) {
     var patt = new RegExp("ObjectID");
-    if ( patt.test(id) ) {
-      id = id.replace("ObjectID(\"","").replace("\")","");
+    if (patt.test(id)) {
+      id = id.replace("ObjectID(\"", "").replace("\")", "");
       oid = new Meteor.Collection.ObjectID();
       oid._str = id;
       id = oid;
@@ -81,27 +89,31 @@ if (Meteor.isClient) {
     return id;
   };
 
-  var getAnswers = function( elP ) {
-    var tr = elP.parent().children(), td, i, j, a = [];
-    for ( i=0; i<tr.length; i++ ){
+  var getAnswers = function(elP) {
+    var tr = elP.parent().children(),
+      td, i, j, a = [];
+    for (i = 0; i < tr.length; i++) {
       td = $(tr[i]).children();
-      if ( $(td[0]).text() !== "" ) {
-        a[i] = { text: $(td[0]).text(), value: $(td[1]).text() };
+      if ($(td[0]).text() !== "") {
+        a[i] = {
+          text: $(td[0]).text(),
+          value: $(td[1]).text()
+        };
       }
     }
     return a;
   };
 
-  var selectRow = function () {
+  var selectRow = function() {
     $(event.target.parentElement).parent().children().removeClass("alert alert-success");
     $(event.target.parentElement).addClass("alert alert-success");
   };
 
   Template.main.events({
     'click a[data-toggle="tab"]': function() {
-      setTimeout( function(){
+      setTimeout(function() {
         var db = $("[role=tablist] li.active").text();
-        Session.set("db",db);
+        Session.set("db", db);
       }, 100);
     }
   });
@@ -116,25 +128,30 @@ if (Meteor.isClient) {
   Template.admin_tests.events({
     'click tr': selectRow,
     'keypress td': updateFn,
-    'click .deltest':function(){
+    'click .deltest': function() {
       var elP = $(event.target.parentElement).parent(),
-          id = elP.attr("id");
+        id = elP.attr("id");
       $('#alertModal')
-        .modal({ backdrop: 'static', keyboard: false })
+        .modal({
+          backdrop: 'static',
+          keyboard: false
+        })
         .one('click', '.delsure', function() {
-          Tests.remove({_id:id});
+          Tests.remove({
+            _id: id
+          });
           $('#alertModal').modal("hide");
         });
     }
   });
 
   Template.admin_kuestions.helpers({
-    kuestionsList : function () {
+    kuestionsList: function() {
       return Kuestions.find({}).fetch();
     },
-    kuestionsFieldNames: function(){
+    kuestionsFieldNames: function() {
       var fields = Kuestions.findOne();
-      return ( fields )?Object.keys( fields ):[];
+      return (fields) ? Object.keys(fields) : [];
     }
   });
   Template.admin_kuestions.events({
@@ -143,150 +160,167 @@ if (Meteor.isClient) {
   });
 
   Template.table_results.helpers({
-    resultsList : function () {
-      var condition = Session.get( "filter" );
+    resultsList: function() {
+      var condition = Session.get("filter");
       var r = Results.find(condition).fetch();
       for (var k in r) {
         r[k].date = r[k].date.toDateString();
       }
       return r;
     },
-    resultsFieldNames: function(){
+    resultsFieldNames: function() {
       var fields = Results.findOne();
-      return ( fields )?Object.keys( fields ):[];
+      return (fields) ? Object.keys(fields) : [];
     }
   });
 
   Template.admin_results.events({
     'click tr': selectRow,
     'keypress td': updateFn,
-    'click .deluser':function(){
+    'click .deluser': function() {
       var elP = $(event.target.parentElement).parent(),
-          id = elP.attr("id");
+        id = elP.attr("id");
       $('#alertModal')
-        .modal({ backdrop: 'static', keyboard: false })
+        .modal({
+          backdrop: 'static',
+          keyboard: false
+        })
         .one('click', '.delsure', function() {
-          Meteor.call( 
-            'delUserTest', 
-            {id:id},
-            function(err, response ) { 
-              if ( err) { console.log( err, response ); 
-              } else { 
-                console.log( response );
+          Meteor.call(
+            'delUserTest', {
+              id: id
+            },
+            function(err, response) {
+              if (err) {
+                console.log(err, response);
+              } else {
+                console.log(response);
               }
             }
           );
           $('#alertModal').modal("hide");
         });
     },
-    'click .recalcresult':function(){
-      Meteor.call( 
-        "recalcResults", 
-        {userTest:this.user}, 
-        function( err, response ) { 
-          if ( err) { console.log( err, response ); 
-          } else { 
-            console.log( "RECALCULATED" );
+    'click .recalcresult': function() {
+      Meteor.call(
+        "recalcResults", {
+          userTest: this.user
+        },
+        function(err, response) {
+          if (err) {
+            console.log(err, response);
+          } else {
+            console.log("RECALCULATED");
           }
         }
-      ); 
+      );
     },
-    'click .showuser': function(){
-      Session.set( "answers_id", this._id );
-      Session.set( "answers_username", this.username );
-      Session.set( "answers_email", this.email );
-      Session.set( "answers_score", this.score );
-      Session.set( "answers_time", this.time );
-      Session.set( "answers_test", this.user.substring(17) );
-      Session.set( "answers_testId", this.user );
+    'click .showuser': function() {
+      Session.set("answers_id", this._id);
+      Session.set("answers_username", this.username);
+      Session.set("answers_email", this.email);
+      Session.set("answers_score", this.score);
+      Session.set("answers_time", this.time);
+      Session.set("answers_test", this.user.substring(17));
+      Session.set("answers_testId", this.user);
 
-      $('#showUserModal').modal({ backdrop: 'static', keyboard: false });
+      $('#showUserModal').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
     }
   });
 
   Template.admin_ranking.helpers({
-    resultsList:function(){
+    resultsList: function() {
       var R = Ranking.find({}).fetch();
-      for( var k in R ) {
-        R[k].jsClass = (R[k].result_js > 80)?"success":(R[k].result_js > 60)?"warning":(R[k].result_js > 0)?"danger":"";
-        R[k].qaClass = (R[k].result_qa > 80)?"success":(R[k].result_qa > 60)?"warning":(R[k].result_qa > 0)?"danger":"";
-        R[k].tgClass = (R[k].result_tg > 80)?"success":(R[k].result_tg > 60)?"warning":(R[k].result_tg > 0)?"danger":"";
-        R[k].hcClass = (R[k].result_hc > 80)?"success":(R[k].result_hc > 60)?"warning":(R[k].result_hc > 0)?"danger":"";
-        R[k].frClass = (R[k].result_fk > 80)?"success":(R[k].result_fk > 60)?"warning":(R[k].result_fk > 0)?"danger":"";
+      for (var k in R) {
+        R[k].jsClass = (R[k].result_js > 80) ? "success" : (R[k].result_js > 60) ? "warning" : (R[k].result_js > 0) ? "danger" : "";
+        R[k].qaClass = (R[k].result_qa > 80) ? "success" : (R[k].result_qa > 60) ? "warning" : (R[k].result_qa > 0) ? "danger" : "";
+        R[k].tgClass = (R[k].result_tg > 80) ? "success" : (R[k].result_tg > 60) ? "warning" : (R[k].result_tg > 0) ? "danger" : "";
+        R[k].hcClass = (R[k].result_hc > 80) ? "success" : (R[k].result_hc > 60) ? "warning" : (R[k].result_hc > 0) ? "danger" : "";
+        R[k].frClass = (R[k].result_fk > 80) ? "success" : (R[k].result_fk > 60) ? "warning" : (R[k].result_fk > 0) ? "danger" : "";
       }
-      if ( Session.get("filterRanking") !== "" ) {
+      if (Session.get("filterRanking") !== "") {
         R.sort(dynamicNumberSort(Session.get("filterRanking")));
       }
       return R;
     },
-    resultsFieldNames: function(){
+    resultsFieldNames: function() {
       var fields = Ranking.findOne({});
-      return ( fields )?Object.keys( fields ):[];
+      return (fields) ? Object.keys(fields) : [];
     }
   });
   Template.admin_ranking.events({
-    'click .resultFilter':function(e){
+    'click .resultFilter': function(e) {
       var id = e.target.id;
-      if ( Session.get("filterRanking") === e.target.id ) {
-        Session.set("filterRanking","-"+id);
-      } else if ( Session.get("filterRanking") === ("-"+e.target.id) ) {
-        Session.set("filterRanking","");
+      if (Session.get("filterRanking") === e.target.id) {
+        Session.set("filterRanking", "-" + id);
+      } else if (Session.get("filterRanking") === ("-" + e.target.id)) {
+        Session.set("filterRanking", "");
       } else {
-        Session.set("filterRanking",id);
+        Session.set("filterRanking", id);
       }
     }
   });
 
   Template.showUserModal.helpers({
-    username: function(){
+    username: function() {
       return Session.get("answers_username");
     },
-    id: function(){
+    id: function() {
       return Session.get("answers_id");
     },
-    email: function(){
+    email: function() {
       return Session.get("answers_email");
     },
-    score: function(){
+    score: function() {
       return Session.get("answers_score");
     },
-    time: function(){
+    time: function() {
       return Session.get("answers_time");
     },
-    test:function(){
+    test: function() {
       return Session.get("answers_test");
     },
-    testId: function(){
-      return Session.get("answers_testId" );
+    testId: function() {
+      return Session.get("answers_testId");
     },
-    answersFieldNames: function(){
+    answersFieldNames: function() {
       var fields = Answers.findOne();
-      return ( fields )?Object.keys( fields ):[];
+      return (fields) ? Object.keys(fields) : [];
     },
-    userAnswers: function(){
-      var a = Answers.find({"test":Session.get( "answers_test"), "user":Session.get("answers_testId")}).fetch(),
-          b = Kuestions.find({"test":Session.get( "answers_test")}).fetch(),
-          c = [];
-      for( var i=0; i<a.length; i++ ) {
+    userAnswers: function() {
+      var a = Answers.find({
+          "test": Session.get("answers_test"),
+          "user": Session.get("answers_testId")
+        }).fetch(),
+        b = Kuestions.find({
+          "test": Session.get("answers_test")
+        }).fetch(),
+        c = [];
+      for (var i = 0; i < a.length; i++) {
         c[i] = {};
         b[i] = b[i] || {};
         c[i].question = b[i].question || "";
         b[i].answers = b[i].answers || [""];
-        c[i].answerOK = b[i].answers.map(function(a){ return ( a.value==1 )?a.text:""; } ).join( "" ) || "";
+        c[i].answerOK = b[i].answers.map(function(a) {
+          return (a.value == 1) ? a.text : "";
+        }).join("") || "";
         c[i].answerTXT = a[i].answerTXT || "";
-        c[i].correcto = (c[i].answerOK == c[i].answerTXT && c[i].answerOK !== "")?"success":"danger";
+        c[i].correcto = (c[i].answerOK == c[i].answerTXT && c[i].answerOK !== "") ? "success" : "danger";
       }
       return c;
     }
   });
 
   Template.admin_team.helpers({
-    teamList : function () {
+    teamList: function() {
       return KTeam.find().fetch();
     },
-    teamFieldNames: function(){
+    teamFieldNames: function() {
       var fields = KTeam.findOne();
-      return ( fields )?Object.keys( fields ):[];
+      return (fields) ? Object.keys(fields) : [];
     }
   });
   Template.admin_team.events({
@@ -295,17 +329,17 @@ if (Meteor.isClient) {
   });
 
   Template.admin_json.helpers({
-    uploaded:function(){
+    uploaded: function() {
       return {
-        finished:function( index,fileInfo,context){
-          console.log( "TERMINO" );
-          Session.set( "jsonFileName", fileInfo );
+        finished: function(index, fileInfo, context) {
+          console.log("TERMINO");
+          Session.set("jsonFileName", fileInfo);
         }
       };
     },
-    json_filename:function(){
+    json_filename: function() {
       var jf = Session.get("jsonFileName");
-      if ( jf !== "" ) {
+      if (jf !== "") {
         $("#uploadLayer").show();
         $("#loaddbLayer").hide();
       } else {
@@ -320,21 +354,21 @@ if (Meteor.isClient) {
     db: function() {
       return Session.get("db");
     },
-    dbTests: function(){
-      return ( Session.get("db")=="Tests");
+    dbTests: function() {
+      return (Session.get("db") == "Tests");
     },
-    dbKuestions: function(){
-      return ( Session.get("db")=="Kuestions");
+    dbKuestions: function() {
+      return (Session.get("db") == "Kuestions");
     },
-    dbTeam: function(){
-      return ( Session.get("db")=="Kairos Team");
+    dbTeam: function() {
+      return (Session.get("db") == "Kairos Team");
     }
   });
   Template.insertModal.events({
-    'click .save': function(){
-      var values = $( "#insertForm" ).serializeObject();
+    'click .save': function() {
+      var values = $("#insertForm").serializeObject();
       //console.log( values );
-      window[Session.get("db")].insert( values );
+      window[Session.get("db")].insert(values);
       $('[data-dismiss="modal"]').trigger("click");
       $('#insertForm').trigger("reset");
     }
@@ -344,20 +378,27 @@ if (Meteor.isClient) {
     actions: function() {
       var actions = "";
 
-      if ( this.navbar == "results" ) { 
-        var users =_.uniq(Results.find({}, {
-          sort: {username: 1}, fields: {username: true}
-        }).fetch().map(function(x) { return x.username; }), true);
+      if (this.navbar == "results") {
+        var users = _.uniq(Results.find({}, {
+          sort: {
+            username: 1
+          },
+          fields: {
+            username: true
+          }
+        }).fetch().map(function(x) {
+          return x.username;
+        }), true);
         var uO = "";
         //console.log(users);
-        for (var k in users){
-          uO += "<option value='"+users[k]+"'>"+users[k]+"</option>";
+        for (var k in users) {
+          uO += "<option value='" + users[k] + "'>" + users[k] + "</option>";
         }
         var tests = Tests.find({}).fetch();
         var tO = "";
-        for (k in tests){
-          for (var k2 in tests[k].tests){
-            tO += "<option value='"+tests[k].tests[k2].name+"'>"+tests[k].tests[k2].name+"</option>";
+        for (k in tests) {
+          for (var k2 in tests[k].tests) {
+            tO += "<option value='" + tests[k].tests[k2].name + "'>" + tests[k].tests[k2].name + "</option>";
           }
         }
         actions += "<form id='filterForm'><label>Filter by:</label> ";
@@ -366,25 +407,24 @@ if (Meteor.isClient) {
         actions += '<span class="input-group-addon">to</span>';
         actions += '<input type="text" class="input-sm form-control datefilter" id="datefilterend" name="datefilterend" placeholder="date filter end" />';
         actions += '</div> ';
-        actions += '<select class="form-control" id="userfilter"><option>User Filter</option>'+uO+'</select> ';
-        actions += '<select class="form-control" id="testfilter"><option>Test Filter</option>'+tO+'</select> ';
+        actions += '<select class="form-control" id="userfilter"><option>User Filter</option>' + uO + '</select> ';
+        actions += '<select class="form-control" id="testfilter"><option>Test Filter</option>' + tO + '</select> ';
         actions += '<button class="btn btn-info" id="cleanFilter">Clean Filter</button></form>';
       }
       return actions;
     }
   });
-  Template.navbar.rendered=function() {
+  Template.navbar.rendered = function() {
 
   };
   Template.navbar.events({
-    'click .insert': function( e ){
-    },
-    'click #cleanFilter': function(){
+    'click .insert': function(e) {},
+    'click #cleanFilter': function() {
       $("#filterForm")[0].reset();
-      Session.set( "filter", {} );
+      Session.set("filter", {});
       return false;
     },
-    'click #datefilter.input-daterange':function(){
+    'click #datefilter.input-daterange': function() {
       if (firstClickDatePicker) {
         firstClickDatePicker = false;
         $('#datefilter.input-daterange').datepicker({
@@ -396,48 +436,53 @@ if (Meteor.isClient) {
           autoclose: true,
           todayHighlight: true
         });
-        $("#datefilterstart").trigger ("blur");
-        $("#datefilterstart").trigger ("click");
+        $("#datefilterstart").trigger("blur");
+        $("#datefilterstart").trigger("click");
       }
     },
-    'change .datefilter':function( e ){
+    'change .datefilter': function(e) {
       var dS = $("#datefilterstart").val();
       var dE = $("#datefilterend").val();
-      var filterNow = Session.get( "filter" );
-      if ( dS !== "" && dE !== "" ) {
-      dS = dS.split("/");
-      dE = dE.split("/");
-      var dateStart = new Date( dS[1]+"-"+dS[0]+"-"+dS[2]);
-      var dateEnd = new Date( dE[1]+"-"+dE[0]+"-"+dE[2]);
-      dateEnd = new Date( dateEnd.setDate( dateEnd.getDate() + 1 ) );
-      console.log ("datefilter changed " + dateStart + " , " + dateEnd );
-        filterNow.date = { $gte: dateStart, $lt: dateEnd };
+      var filterNow = Session.get("filter");
+      if (dS !== "" && dE !== "") {
+        dS = dS.split("/");
+        dE = dE.split("/");
+        var dateStart = new Date(dS[1] + "-" + dS[0] + "-" + dS[2]);
+        var dateEnd = new Date(dE[1] + "-" + dE[0] + "-" + dE[2]);
+        dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 1));
+        console.log("datefilter changed " + dateStart + " , " + dateEnd);
+        filterNow.date = {
+          $gte: dateStart,
+          $lt: dateEnd
+        };
       } else {
         delete(filterNow.date);
       }
-      Session.set( "filter", filterNow );
+      Session.set("filter", filterNow);
     },
-    'change #userfilter':function( e ){
-      console.log( "userfilter changed " + e.target.value );
+    'change #userfilter': function(e) {
+      console.log("userfilter changed " + e.target.value);
       var user = e.target.value;
-      var filterNow = Session.get( "filter" );
-      if ( user !== "User Filter" ) {
+      var filterNow = Session.get("filter");
+      if (user !== "User Filter") {
         filterNow.username = user;
       } else {
         delete(filterNow.username);
       }
-      Session.set( "filter", filterNow );
+      Session.set("filter", filterNow);
     },
-    'change #testfilter': function( e ){
-      console.log( "testfilter changed" + e.target.value );
+    'change #testfilter': function(e) {
+      console.log("testfilter changed" + e.target.value);
       var test = e.target.value;
-      var filterNow = Session.get( "filter" );
-      if ( test !== "Test Filter" ) {
-        filterNow.user = {'$regex': test+'$'};
+      var filterNow = Session.get("filter");
+      if (test !== "Test Filter") {
+        filterNow.user = {
+          '$regex': test + '$'
+        };
       } else {
         delete(filterNow.user);
       }
-      Session.set( "filter", filterNow );
+      Session.set("filter", filterNow);
     }
   });
 }

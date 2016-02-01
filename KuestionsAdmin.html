@@ -3,391 +3,385 @@
 </head>
 
 <body>
-	<div class="page-header">
-	  <h1>Kuestions Admin</h1>
-	</div>
-
+  <div class="page-header">
+    <h1>Kuestions Admin</h1>
+  </div>
+  {{> container}}
+</body>
+<template name="container">
   <div class="container">
     <div class="pull-right">{{> loginButtons}}</div>
-    {{#if currentUser}}
-		  {{> main }}
-    {{/if}}
-	</div>
-
-</body>
-
+    {{#if currentUser}} {{> main }} {{/if}}
+  </div>
+</template>
 <template name="main">
-	<div>
-		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#tests" aria-controls="tests" role="tab" data-toggle="tab">Tests</a></li>
-			<li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
-			<li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
+  <div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#tests" aria-controls="tests" role="tab" data-toggle="tab">Tests</a></li>
+      <li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
+      <li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
       <li role="presentation"><a href="#ranking" aria-controls="results" role="tab" data-toggle="tab">Ranking</a></li>
-			<li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
-			<li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
-		</ul>
-
-		<!-- Tab panes -->
-		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="tests">
-				<h2>Tests</h2>
-				{{> admin_tests}}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="kuestions">
-				<h2>Kuestions List</h2>
-  			{{> admin_kuestions}}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="results">
-				<h2>Results</h2>
-  			{{> admin_results}}
-			</div>
-      <div role="tabpanel" class="tab-pane" id="ranking">
-        <h2>Ranking</h2>
-        {{> admin_ranking}}
+      <li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
+      <li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="tests">
+        <h2>Tests</h2> {{> admin_tests}}
       </div>
-			<div role="tabpanel" class="tab-pane" id="kteam">
-				<h2>Kairos Team List</h2>
-  			{{> admin_team}}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="loadkuestions">
-				<h2>LOAD KUESTIONS JSON</h2>
-  			{{> admin_json}}
-			</div>
-		</div>
-	</div>
-
-	{{> insertModal}}
-	{{> alertModal}}
-	{{> showUserModal}}
+      <div role="tabpanel" class="tab-pane" id="kuestions">
+        <h2>Kuestions List</h2> {{> admin_kuestions}}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="results">
+        <h2>Results</h2> {{> admin_results}}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="ranking">
+        <h2>Ranking</h2> {{> admin_ranking}}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="kteam">
+        <h2>Kairos Team List</h2> {{> admin_team}}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="loadkuestions">
+        <h2>LOAD KUESTIONS JSON</h2> {{> admin_json}}
+      </div>
+    </div>
+  </div>
+  {{> insertModal}} {{> alertModal}} {{> showUserModal}}
 </template>
-
 <template name="alertModal">
-	<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Atención</h4>
-	      </div>
-	      <div class="modal-body">
-	        <h3>Vas a proceder a borrar el elemento con id {{idtodel}}</h3>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-	        <button type="button" class="btn btn-danger delsure">Estoy completamente seguro de borrarlo</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+  <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Atención</h4>
+        </div>
+        <div class="modal-body">
+          <h3>Vas a proceder a borrar el elemento con id {{idtodel}}</h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger delsure">Estoy completamente seguro de borrarlo</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
-
 <template name="insertModal">
-	<div id="insertModal" class="modal fade" tabindex="-1" role="dialog">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">Insert new {{db}}</h4>
-	      </div>
-	      <div class="modal-body">
-	        <form id="insertForm" class="form-horizontal">
-	        	{{#if dbTests}}
-	        		{{> insertTestsForm}}
-	        	{{/if}}
-						{{#if dbKuestions}}
-							{{> insertKuestionsForm}}
-	        	{{/if}}
-	        	{{#if dbTeam}}
-	        		{{> insertTeamForm}}
-	        	{{/if}}
-	        </form>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary save">Save changes</button>
-	      </div>
-	    </div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+  <div id="insertModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Insert new {{db}}</h4>
+        </div>
+        <div class="modal-body">
+          <form id="insertForm" class="form-horizontal">
+            {{#if dbTests}} {{> insertTestsForm}} {{/if}} {{#if dbKuestions}} {{> insertKuestionsForm}} {{/if}} {{#if dbTeam}} {{> insertTeamForm}} {{/if}}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary save">Save changes</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 </template>
-
 <template name="showUserModal">
-	<div id="showUserModal" class="modal fade" tabindex="-1" role="dialog">
-	  <div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">Answers from {{username}}</h4>
-	      </div>
-	      <div class="modal-body">
-	      	<div>{{username}} - {{email}} - {{score}} - {{time}} - {{test}}</div>
-	      	<table class="table table-condensed table-hover">
-    				<thead>
-    					<tr>
-    						<th>PREGUNTA</th>
-    						<th>RESPUESTA CORRECTA</th>
-    						<th>RESPUESTA USUARIO</th>
-    					</tr>
-    				</thead>
-    				<tbody>
-    		      		{{#each userAnswers}}
-    					<tr id="{{_id}}" class="{{correcto}}">
-    						<td>{{question}}</td>
-    						<td>{{answerOK}}</td>
-    						<td>{{answerTXT}}</td>
-    					</tr>
-    					{{/each}}
-    				</tbody>
-	      	</table>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+  <div id="showUserModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Answers from {{username}}</h4>
+        </div>
+        <div class="modal-body">
+          <div>{{username}} - {{email}} - {{score}} - {{time}} - {{test}}</div>
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>PREGUNTA</th>
+                <th>RESPUESTA CORRECTA</th>
+                <th>RESPUESTA USUARIO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each userAnswers}}
+              <tr id="{{_id}}" class="{{correcto}}">
+                <td>{{question}}</td>
+                <td>{{answerOK}}</td>
+                <td>{{answerTXT}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
-
 <template name="insertTestsForm">
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Title:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="title" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Name:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="name" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-6 control-label">Questions Random:</label>
-		<div class="checkbox col-sm-6">
-			<label>Sí <input type="radio" name="QRand" value="true"/></label>
-			<label>No <input type="radio" name="QRand" value="false"/></label>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-6 control-label">Answers Random:</label>
-		<div class="checkbox col-sm-6">
-			<label>Sí <input type="radio" name="ARand" value="true"/></label>
-			<label>No <input type="radio" name="ARand" value="false"/></label>
-		</div>
-	</div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Title:</label>
+    <div class="col-sm-10">
+      <input class="form-control" type="text" name="title" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Name:</label>
+    <div class="col-sm-10">
+      <input class="form-control" type="text" name="name" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-6 control-label">Questions Random:</label>
+    <div class="checkbox col-sm-6">
+      <label>Sí
+        <input type="radio" name="QRand" value="true" />
+      </label>
+      <label>No
+        <input type="radio" name="QRand" value="false" />
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-6 control-label">Answers Random:</label>
+    <div class="checkbox col-sm-6">
+      <label>Sí
+        <input type="radio" name="ARand" value="true" />
+      </label>
+      <label>No
+        <input type="radio" name="ARand" value="false" />
+      </label>
+    </div>
+  </div>
 </template>
-
 <template name="insertKuestionsForm">
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Test:</label>
-		<div class="col-sm-10">
-			<select>
-				<option value="">Selecciona un Test</option>
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Question:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="title" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Code Example:</label>
-		<div class="col-sm-10">
-			<textarea class="form-control" rows="5" cols="30" name="code_example"></textarea>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Answer 1:</label>
-		<div class="col-sm-7">
-			<input class="form-control" type="text" name="text1" placeholder="respuesta 1" />
-		</div>
-		<div class="col-sm-3">
-			<input class="form-control" type="text" name="value1" placeholder="valor 0,1,2..."/>
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Answer 2:</label>
-		<div class="col-sm-7">
-			<input class="form-control" type="text" name="text2" placeholder="respuesta 2" />
-		</div>
-		<div class="col-sm-3">
-			<input class="form-control" type="text" name="value2" placeholder="valor 0,1,2..." />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Answer 3:</label>
-		<div class="col-sm-7">
-			<input class="form-control" type="text" name="text3" placeholder="respuesta 3" />
-		</div>
-		<div class="col-sm-3">
-			<input class="form-control" type="text" name="value3" placeholder="valor 0,1,2..."/>
-		</div>
-	</div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Test:</label>
+    <div class="col-sm-10">
+      <select>
+        <option value="">Selecciona un Test</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Question:</label>
+    <div class="col-sm-10">
+      <input class="form-control" type="text" name="title" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Code Example:</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" rows="5" cols="30" name="code_example"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Answer 1:</label>
+    <div class="col-sm-7">
+      <input class="form-control" type="text" name="text1" placeholder="respuesta 1" />
+    </div>
+    <div class="col-sm-3">
+      <input class="form-control" type="text" name="value1" placeholder="valor 0,1,2..." />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Answer 2:</label>
+    <div class="col-sm-7">
+      <input class="form-control" type="text" name="text2" placeholder="respuesta 2" />
+    </div>
+    <div class="col-sm-3">
+      <input class="form-control" type="text" name="value2" placeholder="valor 0,1,2..." />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Answer 3:</label>
+    <div class="col-sm-7">
+      <input class="form-control" type="text" name="text3" placeholder="respuesta 3" />
+    </div>
+    <div class="col-sm-3">
+      <input class="form-control" type="text" name="value3" placeholder="valor 0,1,2..." />
+    </div>
+  </div>
 </template>
-
 <template name="insertTeamForm">
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Name:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="name" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Description:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="description" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Image:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="image" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Twitter:</label>
-		<div class="col-sm-5">
-			<input class="form-control" type="text" name="twitter_link" placeholder="twitter link" />
-		</div>
-		<div class="col-sm-5">
-			<input class="form-control" type="text" name="twitter" placeholder="twitter account" />
-		</div>
-	</div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Name:</label>
+    <div class="col-sm-10">
+      <input class="form-control" type="text" name="name" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Description:</label>
+    <div class="col-sm-10">
+      <input class="form-control" type="text" name="description" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Image:</label>
+    <div class="col-sm-10">
+      <input class="form-control" type="text" name="image" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Twitter:</label>
+    <div class="col-sm-5">
+      <input class="form-control" type="text" name="twitter_link" placeholder="twitter link" />
+    </div>
+    <div class="col-sm-5">
+      <input class="form-control" type="text" name="twitter" placeholder="twitter account" />
+    </div>
+  </div>
 </template>
-
 <template name="navbar">
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	    </div>
-
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	    	<form class="form-inline">
-  				<div class="form-group">
-	      		{{{actions}}}
-	      	</div>
-	      </form>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <form class="form-inline">
+          <div class="form-group">
+            {{{actions}}}
+          </div>
+        </form>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
 </template>
-
 <template name="admin_tests">
-	{{> navbar navbar="tests"}}
-	<div class="row">
-		<div class="table-responsive">
-			<table class="table table-condensed table-hover">
-				<thead>
-					<tr>
-						<th><!--ID--></th>
-						<th>Type</th>
-						<th>Img</th>
-						<th>Description</th>
-						<th>Num.Test</th>
-						<!--<th>Title</th>
-						<th>Name</th>
-						<th>QRand</th>
-						<th>ARand</th>-->
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-			{{#each testList}}
-				<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-					<td><!--{{_id}}--></td>
-					<td contenteditable="true" data-field="type">{{type}}</td>
-					<td contenteditable="true" data-field="img">{{img}}</td>
-					<td contenteditable="true" data-field="description">{{description}}</td>
-					<td data-field="numTest">{{numTest}}</td>
-					<!--<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
-					<td contenteditable="true" data-field="ARand">{{# if ARand }}true{{else}}false{{/if}}</td>-->
-					<td><a href="#delete-result" class="btn btn-danger deltest">DEL</a></td>
-				</tr>
-			{{/each}}
-				</tbody>
-			</table>
-		</div>
-	</div>
+  {{> navbar navbar="tests"}}
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>
+              <!--ID-->
+            </th>
+            <th>Type</th>
+            <th>Img</th>
+            <th>Description</th>
+            <th>Num.Test</th>
+            <!--<th>Title</th>
+            <th>Name</th>
+            <th>QRand</th>
+            <th>ARand</th>-->
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each testList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td>
+              <!--{{_id}}-->
+            </td>
+            <td contenteditable="true" data-field="type">{{type}}</td>
+            <td contenteditable="true" data-field="img">{{img}}</td>
+            <td contenteditable="true" data-field="description">{{description}}</td>
+            <td data-field="numTest">{{numTest}}</td>
+            <!--<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
+          <td contenteditable="true" data-field="ARand">{{# if ARand }}true{{else}}false{{/if}}</td>-->
+            <td><a href="#delete-result" class="btn btn-danger deltest">DEL</a></td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
-
-
 <template name="admin_kuestions">
-	{{> navbar navbar="kuestions"}}
-	<div class="row">
-		<div class="table-responsive">
-			<table class="table table-condensed table-hover">
-				<thead>
-					<tr>
-					{{#each kuestionsFieldNames}}
-						<th>{{this}}</th>
-					{{/each}}
-					</tr>
-				</thead>
-				<tbody>
-				{{#each kuestionsList}}
-					<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-						<td><!--{{_id}}--></td>
-						<td contenteditable="true" data-field="test">{{test}}</td>
-						<td contenteditable="true" data-field="question">{{question}}</td>
-						<td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
-						<td><table class="table table-striped"><tbody>
-						{{#each answers}}
-							<tr><td contenteditable="true" data-field="text">{{text}}</td><td contenteditable="true" data-field="value">{{value}}</td></tr>
-						{{/each}}
-						</tbody></table></td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-	</div>
+  {{> navbar navbar="kuestions"}}
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            {{#each kuestionsFieldNames}}
+            <th>{{this}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each kuestionsList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td>
+              <!--{{_id}}-->
+            </td>
+            <td contenteditable="true" data-field="test">{{test}}</td>
+            <td contenteditable="true" data-field="question">{{question}}</td>
+            <td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
+            <td>
+              <table class="table table-striped">
+                <tbody>
+                  {{#each answers}}
+                  <tr>
+                    <td contenteditable="true" data-field="text">{{text}}</td>
+                    <td contenteditable="true" data-field="value">{{value}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
-
 <template name="admin_results">
-	<div class="row">
-		{{> navbar navbar="results"}}
-		{{> table_results }}
-	</div>
+  <div class="row">
+    {{> navbar navbar="results"}} {{> table_results }}
+  </div>
 </template>
-
 <template name="table_results">
-	<div class="table-responsive">
-		<table class="table table-condensed table-hover">
-			<thead>
-				<tr>
-				{{#each resultsFieldNames}}
-					<th>{{this}}</th>
-				{{/each}}
-				<th></th><th></th>
-				</tr>
-			</thead>
-			<tbody>
-			{{#each resultsList}}
-				<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-					<td><!--{{_id}}--></td>
-					<td>{{user}}</td>
-					<td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
-					<td>{{email}}</td>
-					<td>{{score}}</td>
-					<td>{{time}}</td>
-					<td><a href="#bydate" class="bydate" data-toggle="modal" data-trigger="manual">{{date}}</a></td>
-					<td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
-					<td><a href="#recalc-result" class="btn btn-warning recalcresult" data-user="{{user}}">RECALC</a></td>
-				</tr>
-			{{/each}}
-			</tbody>
-		</table>
-	</div>
+  <div class="table-responsive">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          {{#each resultsFieldNames}}
+          <th>{{this}}</th>
+          {{/each}}
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each resultsList}}
+        <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+          <td>
+            <!--{{_id}}-->
+          </td>
+          <td>{{user}}</td>
+          <td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
+          <td>{{email}}</td>
+          <td>{{score}}</td>
+          <td>{{time}}</td>
+          <td><a href="#bydate" class="bydate" data-toggle="modal" data-trigger="manual">{{date}}</a></td>
+          <td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
+          <td><a href="#recalc-result" class="btn btn-warning recalcresult" data-user="{{user}}">RECALC</a></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 </template>
-
 <template name="admin_ranking">
   <div class="row">
     <div class="table-responsive">
@@ -403,7 +397,7 @@
           </tr>
         </thead>
         <tbody>
-        {{#each resultsList}}
+          {{#each resultsList}}
           <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
             <td>{{username}}</td>
             <td class="{{jsClass}}">{{result_js}}%</td>
@@ -412,55 +406,55 @@
             <td class="{{hcClass}}">{{result_hc}}%</td>
             <td class="{{fkClass}}">{{result_fk}}%</td>
           </tr>
-        {{/each}}
+          {{/each}}
         </tbody>
       </table>
     </div>
   </div>
 </template>
-
 <template name="admin_team">
-	{{> navbar navbar="team"}}
-	<div class="row">
-		<div class="table-responsive">
-			<table class="table table-condensed table-hover">
-				<thead>
-					<tr>
-					{{#each teamFieldNames}}
-						<th>{{this}}</th>
-					{{/each}}
-					</tr>
-				</thead>
-				<tbody>
-				{{#each teamList}}
-					<tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-						<td><!--{{_id}}--></td>
-						<td contenteditable="true" data-field="name">{{name}}</td>
-						<td contenteditable="true" data-field="description">{{description}}</td>
-						<td contenteditable="true" data-field="image">{{image}}</td>
-						<td contenteditable="true" data-field="twitter_link">{{twitter_link}}</td>
-						<td contenteditable="true" data-field="twitter">{{twitter}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-	</div>
+  {{> navbar navbar="team"}}
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            {{#each teamFieldNames}}
+            <th>{{this}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each teamList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td>
+              <!--{{_id}}-->
+            </td>
+            <td contenteditable="true" data-field="name">{{name}}</td>
+            <td contenteditable="true" data-field="description">{{description}}</td>
+            <td contenteditable="true" data-field="image">{{image}}</td>
+            <td contenteditable="true" data-field="twitter_link">{{twitter_link}}</td>
+            <td contenteditable="true" data-field="twitter">{{twitter}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
-
 <template name="admin_json">
-	{{> navbar navbar="json"}}
-	<form>
-		<div class="form-group">
-			<label class="col-sm-1 control-label">TEST:</label>
-		</div>
-		<div class="form-group col-sm-6">
-		 	<div id="uploadLayer">
-				{{> upload_bootstrap callback=uploaded}}
-			</div>
-			<div class="form-group hide" id="loaddbLayer">
-				<button type="button" class="col-sm-3 btn btn-success" name="insert">LOAD {{json_filename}} in DB</button>
-			</div>
-		</div>
-	</form>
+  {{> navbar navbar="json"}}
+  <form>
+    <div class="form-group">
+      <label class="col-sm-1 control-label">TEST:</label>
+    </div>
+    <div class="form-group col-sm-6">
+      <div id="uploadLayer">
+        {{> upload_bootstrap callback=uploaded}}
+      </div>
+      <div class="form-group hide" id="loaddbLayer">
+        <button type="button" class="col-sm-3 btn btn-success" name="insert">LOAD {{json_filename}} in DB</button>
+      </div>
+    </div>
+  </form>
 </template>
