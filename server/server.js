@@ -130,9 +130,17 @@ if (Meteor.isServer) {
         user_test = Results.find({
           _id: id
         }).fetch()[0].user;
+      var user = user_test.substring(0,17);
+      var test = user_test.substring(17);
       Results.remove({
         _id: id
       });
+      console.log('Delete results from id ' + id);
+      TimeCounter.remove({
+        user:user,
+        test:test
+      });
+      console.log('Delete TimeCounter from ' + user + ' to test ' + test);
       var answerListToDel = Answers.find({
         user: user_test
       }).fetch();
@@ -145,6 +153,7 @@ if (Meteor.isServer) {
       Answers.remove({
         user: Meteor.userId()
       });
+      console.log('Delete Answers from user ' + Meteor.userId());
       return {
         ok: true,
         n: answerListToDel.length

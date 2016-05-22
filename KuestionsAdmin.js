@@ -4,6 +4,7 @@ Results = new Mongo.Collection("results");
 Ranking = new Mongo.Collection("ranking");
 KTeam = new Mongo.Collection("kteam");
 Tests = new Mongo.Collection("tests");
+TimeCounter = new Mongo.Collection("timecounter");
 
 
 if (Meteor.isClient) {
@@ -12,6 +13,9 @@ if (Meteor.isClient) {
   Session.set("db", "Tests");
   Session.set("filter", {});
   Session.set("filterRanking", "");
+
+  aDB = { "Kairos Team":"KTeam", "Kuestions":"Kuestions", "Tests":"Tests", "Ranking":"Ranking", "Results":"Results" };
+
 
   var firstClickDatePicker = true;
   var dynamicNumberSort = function(property) {
@@ -113,7 +117,8 @@ if (Meteor.isClient) {
     'click a[data-toggle="tab"]': function() {
       setTimeout(function() {
         var db = $("[role=tablist] li.active").text();
-        Session.set("db", db);
+        Session.set("db", aDB[db]);
+        Session.set("dbName", db);
       }, 100);
     }
   });
@@ -292,13 +297,21 @@ if (Meteor.isClient) {
     },
     userAnswers: function() {
       var a = Answers.find({
-          "test": Session.get("answers_test"),
-          "user": Session.get("answers_testId")
-        }).fetch(),
-        b = Kuestions.find({
-          "test": Session.get("answers_test")
-        }).fetch(),
-        c = [];
+        "test": Session.get("answers_test"),
+        "user": Session.get("answers_testId")
+      }, {
+        sort: {
+          answerID: 1
+        }
+      }).fetch();
+      var b = Kuestions.find({
+        "test": Session.get("answers_test")
+      }, {
+        sort: {
+          _id: 1
+        }
+      }).fetch();
+      var c = [];
       for (var i = 0; i < a.length; i++) {
         c[i] = {};
         b[i] = b[i] || {};
@@ -307,8 +320,10 @@ if (Meteor.isClient) {
         c[i].answerOK = b[i].answers.map(function(a) {
           return (a.value == 1) ? a.text : "";
         }).join("") || "";
+        //console.dir(c[i]);
+        //console.log( "Compare " + b[i]._id + " with " + a[i].answerID );
         c[i].answerTXT = a[i].answerTXT || "";
-        c[i].correcto = (c[i].answerOK == c[i].answerTXT && c[i].answerOK !== "") ? "success" : "danger";
+        c[i].correcto = (c[i].answerOK == c[i].answerTXT && c[i].answerOK !== "") ? "success" : "";
       }
       return c;
     }
@@ -316,16 +331,30 @@ if (Meteor.isClient) {
 
   Template.admin_team.helpers({
     teamList: function() {
-      return KTeam.find().fetch();
+      var kt = KTeam.find().fetch();
+      for (var k in kt) {
+        kt[k].txt_email = (kt[k].alert_email) ? "SI" : "NO";
+        kt[k].cls_email = (kt[k].alert_email) ? "btn-success" : "btn-danger";
+      }
+      return kt;
     },
     teamFieldNames: function() {
-      var fields = KTeam.findOne();
-      return (fields) ? Object.keys(fields) : [];
+      var fields = ["Nombre","Descripcion","imagen","twitter link","Twitter","Email","Alert Email"];
+      return fields;
     }
   });
   Template.admin_team.events({
     'click tr': selectRow,
-    'keypress td': updateFn
+    'keypress td': updateFn,
+    'click .btn_alert_email': function(e) {
+      var id = e.target.id.replace("btn_alert_email_", "");
+      var newVal = (e.target.textContent === "NO")?"true":"false";
+      //console.log( "content: " + e.target.textContent);
+      Meteor.call("updateEmailAlert", {
+        id: id,
+        val: newVal
+      }, function(){});
+    }
   });
 
   Template.admin_json.helpers({
@@ -352,16 +381,16 @@ if (Meteor.isClient) {
 
   Template.insertModal.helpers({
     db: function() {
-      return Session.get("db");
+      return Session.get("dbName");
     },
     dbTests: function() {
-      return (Session.get("db") == "Tests");
+      return (Session.get("dbName") == "Tests");
     },
     dbKuestions: function() {
-      return (Session.get("db") == "Kuestions");
+      return (Session.get("dbName") == "Kuestions");
     },
     dbTeam: function() {
-      return (Session.get("db") == "Kairos Team");
+      return (Session.get("dbName") == "Kairos Team");
     }
   });
   Template.insertModal.events({
@@ -401,7 +430,7 @@ if (Meteor.isClient) {
             tO += "<option value='" + tests[k].tests[k2].name + "'>" + tests[k].tests[k2].name + "</option>";
           }
         }
-        actions += "<form id='filterForm'><label>Filter by:</label> ";
+        actions += '<form id="filterForm"><label>Filter by:</label>';
         actions += '<div class="form-control input-daterange input-group" id="datefilter">';
         actions += '<input type="text" class="input-sm form-control datefilter" id="datefilterstart" name="datefilterstart" placeholder="date filter start" />';
         actions += '<span class="input-group-addon">to</span>';
@@ -411,6 +440,19 @@ if (Meteor.isClient) {
         actions += '<select class="form-control" id="testfilter"><option>Test Filter</option>' + tO + '</select> ';
         actions += '<button class="btn btn-info" id="cleanFilter">Clean Filter</button></form>';
       }
+
+      if (this.navbar == "team") {
+        actions += '<form id="kteamForm">';
+        actions += '<div class="form-group">';
+        actions += '<div class="form-group">';
+        actions += '<label class="col-sm-1 control-label">Actions: </label>';
+        actions += '</div><div class="form-group">';
+        actions += '<button class="btn btn-info insert" id="insertMember">Insert Member</button>';
+        actions += '</div>';
+        actions += '</form>';
+        actions += '</div>';
+      }
+
       return actions;
     }
   });
@@ -418,7 +460,13 @@ if (Meteor.isClient) {
 
   };
   Template.navbar.events({
-    'click .insert': function(e) {},
+    'click .insert': function(e) {
+      $('#insertModal').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+      return false;
+    },
     'click #cleanFilter': function() {
       $("#filterForm")[0].reset();
       Session.set("filter", {});
