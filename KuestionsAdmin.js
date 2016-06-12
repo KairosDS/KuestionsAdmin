@@ -6,8 +6,14 @@ KTeam = new Mongo.Collection("kteam");
 Tests = new Mongo.Collection("tests");
 TimeCounter = new Mongo.Collection("timecounter");
 
-
 if (Meteor.isClient) {
+  Meteor.subscribe('kuestions');
+  Meteor.subscribe('kteam');
+  Meteor.subscribe('tests');
+  Meteor.subscribe('ranking');
+  Meteor.subscribe('timecounter');
+  Meteor.subscribe('results');
+
   Session.set("kuestionsFilter", "{}");
   Session.set("resultsFilter", "{}");
   Session.set("db", "Tests");
@@ -127,6 +133,7 @@ if (Meteor.isClient) {
     testList: function() {
       // De las kuestions un group by: Object.keys( _.groupBy(_.pluck(Kuestions.find({}).fetch(), 'test')) );
       // ahora tiene su propia tabla
+      console.log("tests " + Tests.find({}).fetch().length);
       return Tests.find({}).fetch();
     }
   });
