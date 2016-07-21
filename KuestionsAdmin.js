@@ -7,6 +7,7 @@ Tests = new Mongo.Collection("tests");
 TimeCounter = new Mongo.Collection("timecounter");
 
 if (Meteor.isClient) {
+  Meteor.subscribe('answers');
   Meteor.subscribe('kuestions');
   Meteor.subscribe('kteam');
   Meteor.subscribe('tests');
