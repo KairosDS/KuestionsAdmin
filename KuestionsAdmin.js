@@ -205,7 +205,7 @@ if (Meteor.isClient) {
         }
       }).fetch();
       for (var k in r) {
-        r[k].userTest = r[k].user.slice(-11);
+        r[k].userTest = r[k].user.slice(17);
         r[k].date = new Date(r[k].date).toDateString();
       }
       return r;
