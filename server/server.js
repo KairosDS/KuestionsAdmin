@@ -19,6 +19,13 @@ Meteor.publish("timecounter", function () {
 Meteor.publish("results", function () {
   return Results.find({});
 });
+Meteor.publish("kcode", function(){
+  return Kcode.find({});
+})
+Meteor.publish('files.json.all', function () {
+  return Json.find().cursor;
+});
+
 
 if (Meteor.isServer) {
   Meteor.startup(function() {
@@ -29,7 +36,16 @@ if (Meteor.isServer) {
         return true;
       }
     });
-    UploadServer.init({
+    KTeam.allow({
+      update: function(userId, doc) {
+        return true;
+      },
+      insert: function(userId, doc) {
+        return true;
+      }
+    });
+
+/*    UploadServer.init({
       tmpDir: process.env.PWD + '/KuestionsUploads/tmp',
       uploadDir: process.env.PWD + '/KuestionsUploads/',
       checkCreateDirectories: false,
@@ -40,7 +56,7 @@ if (Meteor.isServer) {
       mimeTypes: {
         "json": "application/json"
       }
-    });
+    });*/
   });
 
   var closeAllUserSessions = function(userId) {
@@ -238,6 +254,15 @@ if (Meteor.isServer) {
         });
       }
       return "-> " + users.length;
+    },
+
+    generate_code: function(args) {
+      var user = args.user;
+      var now = new Date().getTime()
+      var code = CryptoJS.MD5(now+user+'Kuestions').toString();
+      //console.log(user,now,code);
+      Kcode.insert({code:code, user:"", volatile: true, talento: Meteor.user().profile.name });
+      return code;
     }
   });
 }

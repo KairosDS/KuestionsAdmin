@@ -2,7 +2,7 @@
   "name": "KuestionsAdmin",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "export MONGO_URL=mongodb://localhost:27017/admin && meteor --port 1337 run"
   },
   "dependencies": {
     "babel-runtime": "^6.18.0",

@@ -5,6 +5,20 @@ Ranking = new Mongo.Collection("ranking");
 KTeam = new Mongo.Collection("kteam");
 Tests = new Mongo.Collection("tests");
 TimeCounter = new Mongo.Collection("timecounter");
+Kcode = new Meteor.Collection("kcode");
+
+Json = new FilesCollection({
+  collectionName: 'Json',
+  allowClientCode: false, // Disallow remove files from Client
+  onBeforeUpload: function (file) {
+    // Allow upload files under 10MB, and only in png/jpg/jpeg formats
+    if (file.size <= 2097152 && /json/i.test(file.extension)) {
+      return true;
+    } else {
+      return 'Solo se pueden subir archivos JSON, con un tamaño menor o igual a 2MB';
+    }
+  }
+});
 
 if (Meteor.isClient) {
   Meteor.subscribe('answers');
@@ -15,14 +29,23 @@ if (Meteor.isClient) {
   Meteor.subscribe('timecounter');
   Meteor.subscribe('results');
 
+  Meteor.subscribe('files.json.all');
+
   Session.set("kuestionsFilter", "{}");
   Session.set("resultsFilter", "{}");
   Session.set("db", "Tests");
   Session.set("filter", {});
   Session.set("filterRanking", "");
+  Session.set('code_generated', "");
 
-  aDB = { "Kairos Team":"KTeam", "Kuestions":"Kuestions", "Tests":"Tests", "Ranking":"Ranking", "Results":"Results" };
-
+  aDB = {
+    "Kairos Team": "KTeam",
+    "Kuestions": "Kuestions",
+    "Tests": "Tests",
+    "Ranking": "Ranking",
+    "Results": "Results",
+    "KCode": "KCode"
+  };
 
   var firstClickDatePicker = true;
   var dynamicNumberSort = function(property) {
@@ -71,6 +94,7 @@ if (Meteor.isClient) {
         setdb[field] = value;
       }
       $(event.target).blur();
+      console.log(setdb);
       if (window[Session.get("db")].update({
           _id: id
         }, {
@@ -175,15 +199,25 @@ if (Meteor.isClient) {
   Template.table_results.helpers({
     resultsList: function() {
       var condition = Session.get("filter");
-      var r = Results.find(condition).fetch();
+      var r = Results.find(condition, {
+        sort: {
+          date: -1
+        }
+      }).fetch();
       for (var k in r) {
-        r[k].date = r[k].date.toDateString();
+        r[k].userTest = r[k].user.slice(-11);
+        r[k].date = new Date(r[k].date).toDateString();
       }
       return r;
     },
     resultsFieldNames: function() {
       var fields = Results.findOne();
-      return (fields) ? Object.keys(fields) : [];
+      if (fields) {
+        var keys =  Object.keys(fields);
+        keys.shift();
+        keys[0] = "test";
+        return (fields) ? keys : [];
+      }
     }
   });
 
@@ -347,7 +381,7 @@ if (Meteor.isClient) {
       return kt;
     },
     teamFieldNames: function() {
-      var fields = ["Nombre","Descripcion","imagen","twitter link","Twitter","Email","Alert Email"];
+      var fields = ["Nombre", "Descripcion", "imagen", "twitter link", "Twitter", "Email", "Alert Email"];
       return fields;
     }
   });
@@ -356,12 +390,12 @@ if (Meteor.isClient) {
     'keypress td': updateFn,
     'click .btn_alert_email': function(e) {
       var id = e.target.id.replace("btn_alert_email_", "");
-      var newVal = (e.target.textContent === "NO")?"true":"false";
+      var newVal = (e.target.textContent === "NO") ? "true" : "false";
       //console.log( "content: " + e.target.textContent);
       Meteor.call("updateEmailAlert", {
         id: id,
         val: newVal
-      }, function(){});
+      }, function() {});
     }
   });
 
@@ -384,6 +418,58 @@ if (Meteor.isClient) {
         $("#loaddbLayer").show();
       }
       return jf;
+    }
+  });
+
+  Template.generate_code.events({
+    'click .generate_code': function(e) {
+      var id = e.target.id;
+      Meteor.call('generate_code',{user:Meteor.userId()}, function(err, response){
+        if (err) {
+          console.log(err, response);
+        } else {
+          console.log('code generated ' + response);
+          Session.set('code_generated', response);
+          document.querySelector(".copyCodeBtn").style.display = 'block';
+        }
+      });
+    },
+    'click .copyCodeBtn': function(e) {
+        var selectText = function(objHTML) {
+          if (document.selection) {
+              var range = document.body.createTextRange();
+              range.moveToElementText(objHTML);
+              range.select();
+          } else if (window.getSelection) {
+              var range = document.createRange();
+              range.selectNode(objHTML);
+              window.getSelection().addRange(range);
+          }
+        }
+        var unSelectText = function(e) {
+          if (document.selection) {
+             document.selection.empty();
+          }  else if (window.getSelection) {
+            window.getSelection().removeAllRanges();
+          }
+        }
+        var copycodearea = document.querySelector('.copycodearea');
+        selectText(copycodearea);
+        try {
+          var successful = document.execCommand('copy');
+        } catch (err) {
+          console.log('Error, no se puede copiar');
+        }
+        setTimeout(function(){
+          unSelectText();
+        }, 100);
+    }
+  });
+  Template.generate_code.helpers({
+    'code_generated': function(){
+      var kcode = Session.get('code_generated');
+      var codeStr = (kcode)?document.location.origin + '/?kcode=' + kcode:'';
+      return codeStr;
     }
   });
 
@@ -539,6 +625,45 @@ if (Meteor.isClient) {
         delete(filterNow.user);
       }
       Session.set("filter", filterNow);
+    }
+  });
+
+  Template.uploadJsonForm.onCreated(function () {
+    this.currentUpload = new ReactiveVar(false);
+  });
+
+  Template.uploadJsonForm.helpers({
+    currentUpload: function () {
+      return Template.instance().currentUpload.get();
+    }
+  });
+
+  Template.uploadJsonForm.events({
+    'change #fileInput': function (e, template) {
+      if (e.currentTarget.files && e.currentTarget.files[0]) {
+        // We upload only one file, in case
+        // multiple files were selected
+        var upload = Json.insert({
+          file: e.currentTarget.files[0],
+          streams: 'dynamic',
+          chunkSize: 'dynamic'
+        }, false);
+
+        upload.on('start', function () {
+          template.currentUpload.set(this);
+        });
+
+        upload.on('end', function (error, fileObj) {
+          if (error) {
+            alert('Error during upload: ' + error);
+          } else {
+            alert('File "' + fileObj.name + '" successfully uploaded');
+          }
+          template.currentUpload.set(false);
+        });
+
+        upload.start();
+      }
     }
   });
 }

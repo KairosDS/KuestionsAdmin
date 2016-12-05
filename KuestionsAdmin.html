@@ -23,6 +23,7 @@
       <li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
       <li role="presentation"><a href="#ranking" aria-controls="results" role="tab" data-toggle="tab">Ranking</a></li>
       <li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
+       <li role="presentation"><a href="#generatecode" aria-controls="generatecode" role="tab" data-toggle="tab">Generate Code Test</a></li>
       <li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
     </ul>
     <!-- Tab panes -->
@@ -41,6 +42,9 @@
       </div>
       <div role="tabpanel" class="tab-pane" id="kteam">
         <h2>Kairos Team List</h2> {{> admin_team}}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="generatecode">
+        <h2>Generar Codigo Test</h2> {{> generate_code}}
       </div>
       <div role="tabpanel" class="tab-pane" id="loadkuestions">
         <h2>LOAD KUESTIONS JSON</h2> {{> admin_json}}
@@ -238,6 +242,15 @@
       <input class="form-control" type="text" name="twitter" placeholder="twitter account" />
     </div>
   </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Email:</label>
+    <div class="col-sm-5">
+      <input class="form-control" type="text" name="email" placeholder="email" />
+    </div>
+    <div class="col-sm-5">
+      <input class="form-control" type="text" name="alert_email" placeholder="true/false" />
+    </div>
+  </div>
 </template>
 <template name="navbar">
   <nav class="navbar navbar-default">
@@ -365,10 +378,7 @@
       <tbody>
         {{#each resultsList}}
         <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-          <td>
-            <!--{{_id}}-->
-          </td>
-          <td>{{user}}</td>
+          <td>{{userTest}}</td>
           <td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
           <td>{{email}}</td>
           <td>{{score}}</td>
@@ -427,14 +437,13 @@
         <tbody>
           {{#each teamList}}
           <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-            <td>
-              <!--{{_id}}-->
-            </td>
             <td contenteditable="true" data-field="name">{{name}}</td>
             <td contenteditable="true" data-field="description">{{description}}</td>
             <td contenteditable="true" data-field="image">{{image}}</td>
             <td contenteditable="true" data-field="twitter_link">{{twitter_link}}</td>
             <td contenteditable="true" data-field="twitter">{{twitter}}</td>
+            <td contenteditable="true" data-field="email">{{email}}</td>
+            <td contenteditable="true" data-field="alert_email">{{alert_email}}</td>
           </tr>
           {{/each}}
         </tbody>
@@ -442,19 +451,33 @@
     </div>
   </div>
 </template>
+<template name="generate_code">
+  <form>
+    <div class="form-group">
+      <button type="button" class="col-sm-3 btn btn-success generate_code" name="generate_code">Obtener ENLACE</button>
+    </div>
+    <p></p>
+    <div class="form-group">
+      <div class="col-sm-6 control-label copycodearea">{{code_generated}}</div>
+      <button type="button" style="display:none" class="col-sm-3 btn btn-info copyCodeBtn" name="copyCodeBtn">Copiar ENLACE</button>
+    </div>
+  </form>
+</template>
 <template name="admin_json">
   {{> navbar navbar="json"}}
   <form>
     <div class="form-group">
-      <label class="col-sm-1 control-label">TEST:</label>
+      <label class="col-sm-1 control-label">JSON File:</label>
     </div>
-    <div class="form-group col-sm-6">
-      <div id="uploadLayer">
-        {{> upload_bootstrap callback=uploaded}}
-      </div>
-      <div class="form-group hide" id="loaddbLayer">
-        <button type="button" class="col-sm-3 btn btn-success" name="insert">LOAD {{json_filename}} in DB</button>
-      </div>
-    </div>
+   {{> uploadJsonForm}}
   </form>
+</template>
+
+<template name="uploadJsonForm">
+  {{#with currentUpload}}
+    Uploading <b>{{file.name}}</b>:
+    <span id="progress">{{progress.get}}%</span>
+  {{else}}
+    <input id="fileInput" type="file" />
+  {{/with}}
 </template>
