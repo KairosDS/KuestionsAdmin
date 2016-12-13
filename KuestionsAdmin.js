@@ -28,6 +28,7 @@ if (Meteor.isClient) {
   Meteor.subscribe('ranking');
   Meteor.subscribe('timecounter');
   Meteor.subscribe('results');
+  Meteor.subscribe('kcode');
 
   Meteor.subscribe('files.json.all');
 
@@ -473,9 +474,40 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.kcode_list.events({
+    'click .delKcode': function(ev) {
+      var id = ev.target.id;
+      Meteor.call(
+        'deleteKcode', {
+          id: id
+        },
+        function(err, response) {
+          if (err) {
+            console.log(err, response);
+          }
+        }
+      );
+    }
+  });
+  Template.kcode_list.helpers({
+    'kcodeFieldNames': function() {
+      var fields = ['Link Activo', 'Responsable'];
+      return fields;
+    },
+    'kcodeList': function() {
+      var kc = Kcode.find().fetch();
+      for(k in kc) {
+        kc[k].link = document.location.origin + '/?kcode=' + kc[k].code;
+        kc[k].inuse = (kc['user']!=='') ? 'USANDOSE' : '';
+        kc[k].inuse_style = (kc['user']!=='') ? 'background:rgba(0,255,0,0.3);' : '';
+      }
+      return kc;
+    }
+  });
+
   Template.insertModal.helpers({
     db: function() {
-      return Session.get("dbName");
+      return Session.get('dbName');
     },
     dbTests: function() {
       return (Session.get("dbName") == "Tests");

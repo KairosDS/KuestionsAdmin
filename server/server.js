@@ -199,6 +199,11 @@ if (Meteor.isServer) {
       };
     },
 
+    deleteKcode: function(args) {
+      var id = args.id;
+      return Kcode.remove({_id:id});
+    },
+
     calcAllRankings: function(args) {
       var res, username, rt, el, test, s, rN;
       var percents = {
