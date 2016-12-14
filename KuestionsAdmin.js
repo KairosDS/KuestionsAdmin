@@ -208,6 +208,7 @@ if (Meteor.isClient) {
       for (var k in r) {
         r[k].userTest = r[k].user.slice(17);
         r[k].date = new Date(r[k].date).toDateString();
+        r[k].time = r[k].time.toString().replace('Elapsed: ','');
       }
       return r;
     },
@@ -216,7 +217,8 @@ if (Meteor.isClient) {
       if (fields) {
         var keys =  Object.keys(fields);
         keys.shift();
-        keys[0] = "test";
+        keys[0] = 'test';
+        keys.push('talento');
         return (fields) ? keys : [];
       }
     }
@@ -242,7 +244,7 @@ if (Meteor.isClient) {
               if (err) {
                 console.log(err, response);
               } else {
-                console.log(response);
+                //console.log(response);
               }
             }
           );
@@ -429,7 +431,7 @@ if (Meteor.isClient) {
         if (err) {
           console.log(err, response);
         } else {
-          console.log('code generated ' + response);
+          //console.log('code generated ' + response);
           Session.set('code_generated', response);
           document.querySelector(".copyCodeBtn").style.display = 'block';
         }
