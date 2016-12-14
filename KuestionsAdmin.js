@@ -498,8 +498,8 @@ if (Meteor.isClient) {
       var kc = Kcode.find().fetch();
       for(k in kc) {
         kc[k].link = document.location.origin + '/?kcode=' + kc[k].code;
-        kc[k].inuse = (kc['user']!=='') ? 'USANDOSE' : '';
-        kc[k].inuse_style = (kc['user']!=='') ? 'background:rgba(0,255,0,0.3);' : '';
+        kc[k].inuse = (kc[k]['user']!=='') ? 'USANDOSE' : '';
+        kc[k].inuse_style = (kc[k]['user']!=='') ? 'background:rgba(0,255,0,0.3);' : '';
       }
       return kc;
     }
