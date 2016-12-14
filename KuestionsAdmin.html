@@ -1,4 +1,11 @@
 <head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="administrador del sistema de test de candidatos de Kairós">
+    <meta name="author" content="@manufosela">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
   <title>Kuestions Admin</title>
 </head>
 
@@ -486,7 +493,11 @@
         <td>{{link}}</td>
         <td>{{talento}}</td>
         <td>{{inuse}}</td>
+        {{#if volatile}}
         <td><button type="button" id="{{_id}}" class="btn btn-danger delKcode" name="delKcode">DEL</button></td>
+        {{else}}
+        <td></td>
+        {{/if}}
       </tr>
       {{/each}}
     </table>
