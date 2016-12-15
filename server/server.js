@@ -26,7 +26,6 @@ Meteor.publish('files.json.all', function () {
   return Json.find().cursor;
 });
 
-
 if (Meteor.isServer) {
   Meteor.startup(function() {
 
@@ -72,9 +71,17 @@ if (Meteor.isServer) {
   Accounts.onLogin(function(user) {
     var userId = user.user._id;
     var userEmail = user.user.services.google.email;
-    var domain = userEmail.split("@")[1];
+    var emailData = userEmail.split("@");
+    var name = emailData[0];
+    var domain = emailData[1];
+
+    console.log("Logged: " + name, domain);
     if (domain !== "kairosds.com" && domain !== "kairosds.es") {
       console.log(userEmail + "("+domain+") no es de KAIRÓS");
+      closeAllUserSessions(userId);
+    }
+    if (Adminusers.find({user:name}).fetch().length === 0) {
+      console.log(userEmail + " no tiene permisos de administración");
       closeAllUserSessions(userId);
     }
   });

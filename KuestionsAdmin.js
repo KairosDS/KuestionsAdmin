@@ -6,6 +6,7 @@ KTeam = new Mongo.Collection("kteam");
 Tests = new Mongo.Collection("tests");
 TimeCounter = new Mongo.Collection("timecounter");
 Kcode = new Meteor.Collection("kcode");
+Adminusers = new Meteor.Collection("adminusers");
 
 Json = new FilesCollection({
   collectionName: 'Json',
