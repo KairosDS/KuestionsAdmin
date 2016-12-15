@@ -218,7 +218,7 @@ if (Meteor.isClient) {
         var keys =  Object.keys(fields);
         keys.shift();
         keys[0] = 'test';
-        keys.push('talento');
+        keys.push('responsable');
         return (fields) ? keys : [];
       }
     }
