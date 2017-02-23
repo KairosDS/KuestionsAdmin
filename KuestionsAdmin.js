@@ -701,4 +701,11 @@ if (Meteor.isClient) {
       }
     }
   });
+
+  FlowRouter.route('/k-manage/', {
+    name: 'Kmanage.show',
+    action() {
+      BlazeLayout.render('manager_body', {main: 'Kmanage_page'});
+    }
+  });
 }
