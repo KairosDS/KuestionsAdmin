@@ -27,7 +27,7 @@ if (Meteor.isClient) {
   Meteor.subscribe('kuestions');
   Meteor.subscribe('kteam');
   Meteor.subscribe('tests');
-  Meteor.subscribe('testsgroups');
+  Meteor.subscribe('testsgroup');
   Meteor.subscribe('ranking');
   Meteor.subscribe('timecounter');
   Meteor.subscribe('results');
@@ -37,7 +37,7 @@ if (Meteor.isClient) {
 
   Session.set("kuestionsFilter", "{}");
   Session.set("resultsFilter", "{}");
-  Session.set("db", "Tests");
+  Session.set("db", "TestsGroup");
   Session.set("filter", {});
   Session.set("filterRanking", "");
   Session.set('code_generated', "");
@@ -45,7 +45,7 @@ if (Meteor.isClient) {
   aDB = {
     "Kairos Team": "KTeam",
     "Kuestions": "Kuestions",
-    "Tests": "Tests",
+    "TestsGroup": "TestsGroup",
     "Ranking": "Ranking",
     "Results": "Results",
     "KCode": "KCode"
@@ -90,21 +90,23 @@ if (Meteor.isClient) {
         setdb = {};
       id = resolvId(id);
       if (typeof id == "undefined") {
+        // NEXT LINE NEED URGENT REFACTOR!!!!!
         id = elP.parent().parent().parent().parent().attr("id");
         setdb = {
           answers: getAnswers(elP)
         };
       } else {
         setdb[field] = value;
+        console.log(field,value);
       }
       $(event.target).blur();
-      console.log(setdb);
+      console.log(id, setdb);
       if (window[Session.get("db")].update({
           _id: id
         }, {
           $set: setdb
         })) {
-        $(event.target).html("");
+        //$(event.target).html("");
         elP.attr("data-content", "Actualización correcta");
       } else {
         elP.attr("data-content", "Hubo un problema actualizando.");
@@ -152,6 +154,7 @@ if (Meteor.isClient) {
     'click a[data-toggle="tab"]': function() {
       setTimeout(function() {
         var db = $("[role=tablist] li.active").text();
+        console.log("DB: " + db);
         Session.set("db", aDB[db]);
         Session.set("dbName", db);
       }, 100);
@@ -159,11 +162,11 @@ if (Meteor.isClient) {
   });
 
   Template.admin_tests.helpers({
-    testList: function() {
+    testGroupList: function() {
       // De las kuestions un group by: Object.keys( _.groupBy(_.pluck(Kuestions.find({}).fetch(), 'test')) );
       // ahora tiene su propia tabla
-      console.log("tests " + Tests.find({}).fetch().length);
-      return Tests.find({}).fetch();
+      console.log("tests " + TestsGroup.find({}).fetch().length);
+      return TestsGroup.find().fetch();
     }
   });
   Template.admin_tests.events({
@@ -718,14 +721,24 @@ if (Meteor.isClient) {
   FlowRouter.route('/', {
     name: 'Kadmin.show',
     action() {
-      BlazeLayout.render('adminLayer', {main: 'Kmanage_page'});
+      BlazeLayout.render('adminLayer', {});
     }
   });
 
   FlowRouter.route('/k-manage/', {
     name: 'Kmanage.show',
     action() {
-      BlazeLayout.render('manager_body', {main: 'Kmanage_page'});
+      BlazeLayout.render('managerBody', {});
     }
   });
+
+  FlowRouter.notFound = {
+    // Subscriptions registered here don't have Fast Render support.
+    subscriptions: function() {
+
+    },
+    action: function() {
+      console.log("no encontrado")
+    }
+};
 }

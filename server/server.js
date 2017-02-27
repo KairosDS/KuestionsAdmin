@@ -10,6 +10,9 @@ Meteor.publish("kteam", function () {
 Meteor.publish("tests", function () {
   return Tests.find({});
 });
+Meteor.publish("testsgroup", function () {
+  return TestsGroup.find({});
+});
 Meteor.publish("ranking", function () {
   return Ranking.find({});
 });
@@ -37,6 +40,15 @@ if (Meteor.isServer) {
     });
     KTeam.allow({
       update: function(userId, doc) {
+        return true;
+      },
+      insert: function(userId, doc) {
+        return true;
+      }
+    });
+    TestsGroup.allow({
+      update: function(userId, doc) {
+        console.log('update TestsGroup');
         return true;
       },
       insert: function(userId, doc) {

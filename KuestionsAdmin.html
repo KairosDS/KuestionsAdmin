@@ -27,7 +27,7 @@
   <div class="main">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#tests" aria-controls="tests" role="tab" data-toggle="tab">Tests Groups</a></li>
+      <li role="presentation" class="active"><a href="#testsgroup" aria-controls="testsgroup" role="tab" data-toggle="tab">TestsGroups</a></li>
       <li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
       <li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
       <li role="presentation"><a href="#ranking" aria-controls="results" role="tab" data-toggle="tab">Ranking</a></li>
@@ -37,8 +37,8 @@
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="tests">
-        <h2>Tests</h2> {{> admin_tests}}
+      <div role="tabpanel" class="tab-pane active" id="testsgroup">
+        <h2>Tests Groups</h2> {{> admin_tests}}
       </div>
       <div role="tabpanel" class="tab-pane" id="kuestions">
         <h2>Kuestions List</h2> {{> admin_kuestions}}
@@ -289,39 +289,25 @@
   </nav>
 </template>
 <template name="admin_tests">
-  {{> navbar navbar="tests"}}
+  {{> navbar navbar="testsgroup"}}
   <div class="row">
     <div class="table-responsive">
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
-            <th>
-              <!--ID-->
-            </th>
-            <th>Type</th>
-            <th>Img</th>
+            <th>Test Group</th>
+            <th>Logo</th>
             <th>Description</th>
-            <th>Num.Test</th>
-            <!--<th>Title</th>
-            <th>Name</th>
-            <th>QRand</th>
-            <th>ARand</th>-->
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {{#each testList}}
+          {{#each testGroupList}}
           <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-            <td>
-              <!--{{_id}}-->
-            </td>
-            <td contenteditable="true" data-field="type">{{type}}</td>
-            <td contenteditable="true" data-field="img"><img src="https://kuestions.kairosds.com/{{img}}" width="100" /></td>
-            <td contenteditable="true" data-field="description">{{description}}</td>
-            <td data-field="numTest">{{numTest}}</td>
-            <!--<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
-          <td contenteditable="true" data-field="ARand">{{# if ARand }}true{{else}}false{{/if}}</td>-->
-            <td><a href="#delete-result" class="btn btn-danger deltest">DEL</a></td>
+            <td class="col-sm-2 flag_{{lang}}" contenteditable="true" data-field="type">{{testgroup}}</td>
+            <td class="col-sm-2" contenteditable="true" data-field="img"><img src="https://kuestions.kairosds.com/{{img}}" width="50" /></td>
+            <td class="col-sm-6" contenteditable="true" data-field="description">{{description}}</td>
+            <td class="col-sm-2"><a href="#show-tests" class="btn btn-success showtests">TESTS</a></td>
           </tr>
           {{/each}}
         </tbody>
@@ -547,7 +533,7 @@
 
 <!-- GESTION PAGE -->
 
-<template name="manager_body">
+<template name="managerBody">
   {{#if currentUser}}
   <div class="main">
     <h1>PRUEBA</h1>

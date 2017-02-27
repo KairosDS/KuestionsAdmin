@@ -11,11 +11,12 @@ Meteor.startup(function() {
     }
 
     if (!TestsGroup.find().fetch().length) {
-        TestsGroup.insert({ testgroup:"javascript", "name": "js", "img": "img/js.svg", "description": "¿Eres un front-end developer?. ¿Te gusta node? ¿Javascript te pone? ¿Te molan lo web components y Polymer? Estos son tus tests." });
-        TestsGroup.insert({ testgroup:"friki", "name": "fk", "img": "img/friki.svg", "description": {"es": "¿Quieres subir nota? ¿Eres un friki y te mola demostrarlo? Este test es para completar alguno de los otros dos. Son preguntas con un cierto toque diferente. ¿Te atreves? ;)"} });
-        TestsGroup.insert({ testgroup: "java", "name": "java", "img": "img/java.png", "description": "Con Java empecé y con Java terminaré, aunque entre medias me pongan otros retos yo controlo de Backend en Java. Así que te lo demostraré en mi test" });
-        TestsGroup.insert({ testgroup: "arquitecto", "name": "qa", "img": "img/qa.svg", "description": "Si tu perfil es de alguien que sabe de arquitectura tecnológica, de metodologías ágiles, cuidas la calidad, se preocupa por la integración continua, sigue los principios SOLID... estos son tus tests" });
-        TestsGroup.insert({ testgroup: "design", "name": "hc", "img": "img/design.svg", "description": "¿Eres un apasionado del diseño web? ¿Responsive y Adaptative es tu obsesion? ¿CSS3 no tiene secretos para ti? ¿HTML5 y tú sois uno? ¡Este es tu test!" });
+        TestsGroup.insert({ lang: "es", testgroup:"javascript", "name": "js", "img": "img/js.svg", "description": "¿Eres un front-end developer?. ¿Te gusta node? ¿Javascript te pone? ¿Te molan lo web components y Polymer? Estos son tus tests." });
+        TestsGroup.insert({ lang: "es", testgroup:"friki", "name": "fk", "img": "img/friki.svg", "description": "¿Quieres subir nota? ¿Eres un friki y te mola demostrarlo? Este test es para completar alguno de los otros dos. Son preguntas con un cierto toque diferente. ¿Te atreves? ;)" });
+        TestsGroup.insert({ lang: "es", testgroup: "java", "name": "java", "img": "img/java.png", "description": "Con Java empecé y con Java terminaré, aunque entre medias me pongan otros retos yo controlo de Backend en Java. Así que te lo demostraré en mi test" });
+        TestsGroup.insert({ lang: "es", testgroup: "arquitecto", "name": "qa", "img": "img/qa.svg", "description": "Si tu perfil es de alguien que sabe de arquitectura tecnológica, de metodologías ágiles, cuidas la calidad, se preocupa por la integración continua, sigue los principios SOLID... estos son tus tests" });
+        TestsGroup.insert({ lang: "es", testgroup: "design", "name": "hc", "img": "img/design.svg", "description": "¿Eres un apasionado del diseño web? ¿Responsive y Adaptative es tu obsesion? ¿CSS3 no tiene secretos para ti? ¿HTML5 y tú sois uno? ¡Este es tu test!" });
+        TestsGroup.insert({ lang: "en", testgroup:"javascript", "name": "js", "img": "img/js.svg", "description": "Are you a front-end developer ?. Do you like node? You love Javascript? Do you get web components and Polymer? These are your tests." });
     }
 
     if (!Tests.find().fetch().length) {
