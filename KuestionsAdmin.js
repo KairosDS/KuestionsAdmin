@@ -4,6 +4,7 @@ Results = new Mongo.Collection("results");
 Ranking = new Mongo.Collection("ranking");
 KTeam = new Mongo.Collection("kteam");
 Tests = new Mongo.Collection("tests");
+TestsGroup = new Mongo.Collection("testsgroup");
 TimeCounter = new Mongo.Collection("timecounter");
 Kcode = new Meteor.Collection("kcode");
 Adminusers = new Meteor.Collection("adminusers");
@@ -26,6 +27,7 @@ if (Meteor.isClient) {
   Meteor.subscribe('kuestions');
   Meteor.subscribe('kteam');
   Meteor.subscribe('tests');
+  Meteor.subscribe('testsgroups');
   Meteor.subscribe('ranking');
   Meteor.subscribe('timecounter');
   Meteor.subscribe('results');
@@ -146,7 +148,7 @@ if (Meteor.isClient) {
     $(event.target.parentElement).addClass("alert alert-success");
   };
 
-  Template.main.events({
+  Template.adminLayer.events({
     'click a[data-toggle="tab"]': function() {
       setTimeout(function() {
         var db = $("[role=tablist] li.active").text();
@@ -185,6 +187,16 @@ if (Meteor.isClient) {
   });
 
   Template.admin_kuestions.helpers({
+    testsAvailables: function() {
+      return Tests.find({}).fetch();
+    }
+  });
+  Template.admin_kuestions.events({
+    'click tr': selectRow
+  });
+
+/*
+  Template.admin_kuestions_by_test.helpers({
     kuestionsList: function() {
       return Kuestions.find({}).fetch();
     },
@@ -193,10 +205,11 @@ if (Meteor.isClient) {
       return (fields) ? Object.keys(fields) : [];
     }
   });
-  Template.admin_kuestions.events({
+  Template.admin_kuestions_by_test.events({
     'click tr': selectRow,
     'keypress td': updateFn
   });
+*/
 
   Template.table_results.helpers({
     resultsList: function() {
@@ -699,6 +712,13 @@ if (Meteor.isClient) {
 
         upload.start();
       }
+    }
+  });
+
+  FlowRouter.route('/', {
+    name: 'Kadmin.show',
+    action() {
+      BlazeLayout.render('adminLayer', {main: 'Kmanage_page'});
     }
   });
 

@@ -15,17 +15,19 @@
   </div>
   {{> container}}
 </body>
+
 <template name="container">
   <div class="container">
     <div class="pull-right">{{> loginButtons}}</div>
-    {{#if currentUser}} {{> main }} {{/if}}
   </div>
 </template>
-<template name="main">
-  <div>
+
+<template name="adminLayer">
+  {{#if currentUser}}
+  <div class="main">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#tests" aria-controls="tests" role="tab" data-toggle="tab">Tests</a></li>
+      <li role="presentation" class="active"><a href="#tests" aria-controls="tests" role="tab" data-toggle="tab">Tests Groups</a></li>
       <li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
       <li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
       <li role="presentation"><a href="#ranking" aria-controls="results" role="tab" data-toggle="tab">Ranking</a></li>
@@ -59,7 +61,9 @@
     </div>
   </div>
   {{> insertModal}} {{> alertModal}} {{> showUserModal}}
+  {{/if}}
 </template>
+
 <template name="alertModal">
   <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -312,7 +316,7 @@
               <!--{{_id}}-->
             </td>
             <td contenteditable="true" data-field="type">{{type}}</td>
-            <td contenteditable="true" data-field="img">{{img}}</td>
+            <td contenteditable="true" data-field="img"><img src="https://kuestions.kairosds.com/{{img}}" width="100" /></td>
             <td contenteditable="true" data-field="description">{{description}}</td>
             <td data-field="numTest">{{numTest}}</td>
             <!--<td contenteditable="true" data-field="QRand">{{# if QRand }}true{{else}}false{{/if}}</td>
@@ -325,9 +329,22 @@
     </div>
   </div>
 </template>
+
 <template name="admin_kuestions">
   {{> navbar navbar="kuestions"}}
-  <div class="row">
+  <div>
+    {{#each testsAvailables.tests}}
+      <input type="radio" id="{{name}}" name="tests_availables" value=""><label for="{{name}}">{{title}} ({{namne}}</label>
+    {{/each}}
+  </div>
+  <div>
+    <!--{{> admin_kuestions_by_test kuestionsFieldNames kuestionsList}}-->
+  </div>
+</template>
+
+
+<!--template name="admin_kuestions_by_test">
+    <div class="row">
     <div class="table-responsive">
       <table class="table table-condensed table-hover">
         <thead>
@@ -342,7 +359,7 @@
           <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
             <td>
               <!--{{_id}}-->
-            </td>
+<!--            </td>
             <td contenteditable="true" data-field="test">{{test}}</td>
             <td contenteditable="true" data-field="question">{{question}}</td>
             <td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
@@ -365,6 +382,8 @@
     </div>
   </div>
 </template>
+-->
+
 <template name="admin_results">
   <div class="row">
     {{> navbar navbar="results"}} {{> table_results }}
@@ -529,7 +548,11 @@
 <!-- GESTION PAGE -->
 
 <template name="manager_body">
-  <h1>PRUEBA</h1>
-  {{> Template.dynamic template=main}}
-  <h2>Prueba</h2>
+  {{#if currentUser}}
+  <div class="main">
+    <h1>PRUEBA</h1>
+    {{> Template.dynamic template=main}}
+    <h2>Prueba</h2>
+  </div>
+  {{/if}}
 </template>
