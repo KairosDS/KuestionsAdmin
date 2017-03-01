@@ -1,0 +1,19 @@
+<template name="alertModal">
+  <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Atención</h4>
+        </div>
+        <div class="modal-body">
+          <h3>Vas a proceder a borrar el elemento con id {{idtodel}}</h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger delsure">Estoy completamente seguro de borrarlo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

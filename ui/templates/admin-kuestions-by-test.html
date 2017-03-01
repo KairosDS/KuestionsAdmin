@@ -1,0 +1,40 @@
+<!--template name="admin_kuestions_by_test">
+    <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            {{#each kuestionsFieldNames}}
+            <th>{{this}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each kuestionsList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td>
+              <!--{{_id}}-->
+<!--            </td>
+            <td contenteditable="true" data-field="test">{{test}}</td>
+            <td contenteditable="true" data-field="question">{{question}}</td>
+            <td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
+            <td>
+              <table class="table table-striped">
+                <tbody>
+                  {{#each answers}}
+                  <tr>
+                    <td contenteditable="true" data-field="text">{{text}}</td>
+                    <td contenteditable="true" data-field="value">{{value}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+-->

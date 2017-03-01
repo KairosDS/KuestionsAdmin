@@ -1,0 +1,29 @@
+<template name="admin_team">
+  {{> navbar navbar="team"}}
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            {{#each teamFieldNames}}
+            <th>{{this}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each teamList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td contenteditable="true" data-field="name">{{name}}</td>
+            <td contenteditable="true" data-field="description">{{description}}</td>
+            <td contenteditable="true" data-field="image">{{image}}</td>
+            <td contenteditable="true" data-field="twitter_link">{{twitter_link}}</td>
+            <td contenteditable="true" data-field="twitter">{{twitter}}</td>
+            <td contenteditable="true" data-field="email">{{email}}</td>
+            <td contenteditable="true" data-field="alert_email">{{alert_email}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>

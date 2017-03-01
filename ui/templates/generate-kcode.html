@@ -1,0 +1,17 @@
+<template name="generate_code">
+  <div class="row">
+    <form>
+      <div class="form-group">
+        <button type="button" class="col-sm-3 btn btn-success generate_code" name="generate_code">Obtener ENLACE</button>
+      </div>
+      <p></p>
+      <div class="form-group">
+        <div class="col-sm-6 control-label copycodearea">{{code_generated}}</div>
+        <button type="button" style="display:none" class="col-sm-3 btn btn-info copyCodeBtn" name="copyCodeBtn">Copiar ENLACE</button>
+      </div>
+    </form>
+  </div>
+  <div style="margin-top:20px;">
+    {{> kcode_list}}
+  </div>
+</template>

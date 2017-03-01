@@ -1,0 +1,11 @@
+<template name="admin_kuestions">
+  {{> navbar navbar="kuestions"}}
+  <div>
+    {{#each testsAvailables.tests}}
+      <input type="radio" id="{{name}}" name="tests_availables" value=""><label for="{{name}}">{{title}} ({{namne}}</label>
+    {{/each}}
+  </div>
+  <div>
+    <!--{{> admin_kuestions_by_test kuestionsFieldNames kuestionsList}}-->
+  </div>
+</template>

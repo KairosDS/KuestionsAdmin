@@ -1,0 +1,32 @@
+<template name="admin_ranking">
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th><a href="#" class="resultFilter" id="result_java">JAVA</a></th>
+            <th><a href="#" class="resultFilter" id="result_js">JAVASCRIPT</a></th>
+            <th><a href="#" class="resultFilter" id="result_qa">ARQUITECTO</a></th>
+            <th><a href="#" class="resultFilter" id="result_tg">TESTING</a></th>
+            <th><a href="#" class="resultFilter" id="result_hc">HTML/CSS</a></th>
+            <th><a href="#" class="resultFilter" id="result_fk">FRIKI</a></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each resultsList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td>{{username}}</td>
+            <td class="{{jsClass}}">{{result_java}}%</td>
+            <td class="{{jsClass}}">{{result_js}}%</td>
+            <td class="{{qaClass}}">{{result_qa}}%</td>
+            <td class="{{tgClass}}">{{result_tg}}%</td>
+            <td class="{{hcClass}}">{{result_hc}}%</td>
+            <td class="{{fkClass}}">{{result_fk}}%</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>

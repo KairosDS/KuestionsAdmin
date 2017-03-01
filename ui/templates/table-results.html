@@ -1,0 +1,30 @@
+<template name="table_results">
+  <div class="table-responsive">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          {{#each resultsFieldNames}}
+          <th>{{this}}</th>
+          {{/each}}
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each resultsList}}
+        <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+          <td>{{userTest}}</td>
+          <td><a href="#showuser" id="showuser_{{_id}}" class="showuser" data-toggle="modal" data-trigger="manual">{{username}}</a></td>
+          <td>{{email}}</td>
+          <td>{{score}}</td>
+          <td>{{time}}</td>
+          <td>{{date}}</td>
+          <td>{{talento}}</td>
+          <td><a href="#delete-result" class="btn btn-danger deluser">DEL</a></td>
+          <td><a href="#recalc-result" class="btn btn-warning recalcresult" data-user="{{user}}">RECALC</a></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>

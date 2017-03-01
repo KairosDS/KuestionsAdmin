@@ -1,0 +1,27 @@
+<template name="kcode_list">
+  <div class="table-responsive">
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          {{#each kcodeFieldNames}}
+          <th>{{this}}</th>
+          {{/each}}
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      {{#each kcodeList}}
+      <tr style="{{inuse_style}}">
+        <td>{{link}}</td>
+        <td>{{talento}}</td>
+        <td>{{inuse}}</td>
+        {{#if volatile}}
+        <td><button type="button" id="{{_id}}" class="btn btn-danger delKcode" name="delKcode">DEL</button></td>
+        {{else}}
+        <td></td>
+        {{/if}}
+      </tr>
+      {{/each}}
+    </table>
+  </div>
+</template>

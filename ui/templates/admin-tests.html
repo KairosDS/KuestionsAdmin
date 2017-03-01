@@ -1,0 +1,27 @@
+<template name="admin_tests">
+  {{> navbar navbar="testsgroup"}}
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>Test Group</th>
+            <th>Logo</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each testGroupList}}
+          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+            <td class="col-sm-2 flag_{{lang}}" contenteditable="true" data-field="type">{{testgroup}}</td>
+            <td class="col-sm-2" contenteditable="true" data-field="img"><img src="https://kuestions.kairosds.com/{{img}}" width="50" /></td>
+            <td class="col-sm-6" contenteditable="true" data-field="description">{{description}}</td>
+            <td class="col-sm-2"><a href="#show-tests" class="btn btn-success showtests">TESTS</a></td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
