@@ -1,3 +1,5 @@
+  import '../imports/startup/client/routes.js';
+  
   Meteor.subscribe('answers');
   Meteor.subscribe('kuestions');
   Meteor.subscribe('kteam');
