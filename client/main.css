@@ -1,0 +1,6 @@
+/* CSS declarations go here */
+
+.main { margin:2%; padding-left:2%; }
+
+.flag_es { background-image:url("/images/flags/es.png"); background-position:80px 20px; background-size: 30px 20px; background-repeat: no-repeat; } 
+.flag_en { background-image:url("/images/flags/en.png"); background-position:80px 20px; background-size: 30px 20px; background-repeat: no-repeat; }
