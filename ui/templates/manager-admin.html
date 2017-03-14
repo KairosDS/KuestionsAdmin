@@ -1,9 +1,29 @@
 <template name="managerAdmin">
   {{#if currentUser}}
   <div class="main">
-    <h1>PRUEBA</h1>
-    {{> Template.dynamic template=main}}
-    <h2>Prueba</h2>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#testsgroup" aria-controls="testsgroup" role="tab" data-toggle="tab">TestsGroups</a></li>
+      <!--<li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>-->
+      <li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
+      <li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="testsgroup">
+        <h2>Tests Groups</h2> {{> admin_tests}}
+      </div>
+      <!--<div role="tabpanel" class="tab-pane" id="kuestions">
+        <h2>Kuestions List</h2> {{> admin_kuestions}}
+      </div>-->
+      <div role="tabpanel" class="tab-pane" id="kteam">
+        <h2>Kairos Team List</h2> {{> admin_team}}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="loadkuestions">
+        <h2>LOAD KUESTIONS JSON</h2> {{> admin_json}}
+      </div>
+    </div>
   </div>
+  {{> insertModal}} {{> alertModal}} {{> showUserModal}}
   {{/if}}
 </template>

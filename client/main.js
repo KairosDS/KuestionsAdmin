@@ -144,9 +144,19 @@
       // ahora tiene su propia tabla
       console.log("tests " + TestsGroup.find({}).fetch().length);
       return TestsGroup.find().fetch();
+    },
+    testList: function(testgroup, lang) {
+      var test = Tests.find({lang: this.lang, testgroup: this.testgroup}).fetch();
+      return test;
     }
   });
   Template.admin_tests.events({
+    'click a.showtests': function(ev) {
+      var testgroup = ev.target.attributes.value.value;
+      var lang = ev.target.attributes.lang.value;
+      console.log(testsgroup, lang);
+      var tests = Tests.find({lang: lang, testgroup: testgroup}).fetch();
+     },
     'click tr': selectRow,
     'keypress td': updateFn,
     'click .deltest': function() {
@@ -163,6 +173,15 @@
           });
           $('#alertModal').modal("hide");
         });
+    },
+    'click .showkuestions': function(ev) {
+      var lang = ev.target.attributes.lang.value;
+      var test = ev.target.attributes.test.value;
+      $('#kuestionsModal')
+        .modal({
+          backdrop: 'static',
+          keyboard: false
+        })
     }
   });
 
@@ -173,6 +192,20 @@
   });
   Template.admin_kuestions.events({
     'click tr': selectRow
+  });
+
+  Template.kuestionsModal.helpers({
+    kuestionsList: function() {
+      return Kuestions.find({}).fetch();
+    },
+    kuestionsFieldNames: function() {
+      var fields = Kuestions.findOne();
+      return (fields) ? Object.keys(fields) : [];
+    }
+  });
+  Template.kuestionsModal.events({
+    'click tr': selectRow,
+    'keypress td': updateFn
   });
 
 /*

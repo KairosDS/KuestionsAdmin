@@ -1,0 +1,20 @@
+<template name="admin_testlist">
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>Test</th>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each testList}}
+      <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+        <td class="col-sm-2" contenteditable="true" data-field="type">{{title}}</td>
+        <td class="col-sm-2">{{name}}</td>
+        <td><a href="#show-kuestions" class="btn btn-success showkuestions" lang="{{lang}}" test="{{name}}">PREG/RESP</a></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
