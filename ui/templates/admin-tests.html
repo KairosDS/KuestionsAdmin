@@ -2,26 +2,35 @@
   {{> navbar navbar="testsgroup"}}
   <div class="row">
     <div class="table-responsive">
-      <table class="table table-condensed table-hover">
-        <thead>
-          <tr>
-            <th>Test Group</th>
-            <th>Logo</th>
-            <th>Description</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each testGroupList}}
+      {{#each testGroupList}}
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th>Test Group</th>
+              <th>Logo</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
           <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
             <td class="col-sm-2 flag_{{lang}}" contenteditable="true" data-field="type">{{testgroup}}</td>
             <td class="col-sm-2" contenteditable="true" data-field="img"><img src="https://kuestions.kairosds.com/{{img}}" width="50" /></td>
             <td class="col-sm-6" contenteditable="true" data-field="description">{{description}}</td>
-            <td class="col-sm-2"><a href="#show-tests" class="btn btn-success showtests">TESTS</a></td>
+            <td class="col-sm-2"></td>
           </tr>
-          {{/each}}
+          <tr>
+            <td colspan="4" id="{{ŧestgroup}}_list">{{> admin_testlist testList=testList}}</td>
+          </tr>
+          <tr>
+            <td colspan="4" style="background:#CCC;"></td>
+          </tr>
+          <tr>
+            <td colspan="4" style="padding:20px"></td>
+          </tr>
         </tbody>
       </table>
+    {{/each}}
     </div>
   </div>
 </template>

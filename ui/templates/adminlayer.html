@@ -3,36 +3,20 @@
   <div class="main">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#testsgroup" aria-controls="testsgroup" role="tab" data-toggle="tab">TestsGroups</a></li>
-      <li role="presentation"><a href="#kuestions" aria-controls="kuestions" role="tab" data-toggle="tab">Kuestions</a></li>
-      <li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
+      <li role="presentation" class="active"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
       <li role="presentation"><a href="#ranking" aria-controls="results" role="tab" data-toggle="tab">Ranking</a></li>
       <li role="presentation"><a href="#generatecode" aria-controls="generatecode" role="tab" data-toggle="tab">Generate Code Test</a></li>
-      <li role="presentation"><a href="#kteam" aria-controls="kteam" role="tab" data-toggle="tab">Kairos Team</a></li>
-      <li role="presentation"><a href="#loadkuestions" aria-controls="loadkuestions" role="tab" data-toggle="tab">LOAD Kuestions</a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="testsgroup">
-        <h2>Tests Groups</h2> {{> admin_tests}}
-      </div>
-      <div role="tabpanel" class="tab-pane" id="kuestions">
-        <h2>Kuestions List</h2> {{> admin_kuestions}}
-      </div>
-      <div role="tabpanel" class="tab-pane" id="results">
+      <div role="tabpanel" class="tab-pane active" id="results">
         <h2>Results</h2> {{> admin_results}}
       </div>
       <div role="tabpanel" class="tab-pane" id="ranking">
         <h2>Ranking</h2> {{> admin_ranking}}
       </div>
-      <div role="tabpanel" class="tab-pane" id="kteam">
-        <h2>Kairos Team List</h2> {{> admin_team}}
-      </div>
       <div role="tabpanel" class="tab-pane" id="generatecode">
         <h2>Generar Codigo Test</h2> {{> generate_code}}
-      </div>
-      <div role="tabpanel" class="tab-pane" id="loadkuestions">
-        <h2>LOAD KUESTIONS JSON</h2> {{> admin_json}}
       </div>
     </div>
   </div>

@@ -31,7 +31,6 @@ Meteor.publish('files.json.all', function () {
 
 if (Meteor.isServer) {
   Meteor.startup(function() {
-
     // code to run on server at startup
     Answers.allow({
       remove: function(userId, doc) {
