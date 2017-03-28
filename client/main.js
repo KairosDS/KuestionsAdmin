@@ -1,23 +1,14 @@
   import '../imports/startup/client/routes.js';
-  
-  Meteor.subscribe('answers');
-  Meteor.subscribe('kuestions');
-  Meteor.subscribe('kteam');
-  Meteor.subscribe('tests');
-  Meteor.subscribe('testsgroup');
-  Meteor.subscribe('ranking');
-  Meteor.subscribe('timecounter');
-  Meteor.subscribe('results');
-  Meteor.subscribe('kcode');
+  import '../imports/startup/client/subscribes.js';
 
-  Meteor.subscribe('files.json.all');
 
-  Session.set("kuestionsFilter", "{}");
-  Session.set("resultsFilter", "{}");
-  Session.set("db", "TestsGroup");
-  Session.set("filter", {});
-  Session.set("filterRanking", "");
-  Session.set('code_generated', "");
+  Session.set('kuestionsFilter', '{}');
+  Session.set('resultsFilter', '{}');
+  Session.set('db', 'TestsGroup');
+  Session.set('filter', {});
+  Session.set('filterRanking', '');
+  Session.set('code_generated', '');
+  Session.set('kuestionFilter', '')
 
   aDB = {
     "Kairos Team": "KTeam",
@@ -177,6 +168,7 @@
     'click .showkuestions': function(ev) {
       var lang = ev.target.attributes.lang.value;
       var test = ev.target.attributes.test.value;
+      Session.set('kuestionFilter', {lang:lang, test:test});
       $('#kuestionsModal')
         .modal({
           backdrop: 'static',
@@ -196,17 +188,21 @@
 
   Template.kuestionsModal.helpers({
     kuestionsList: function() {
-      return Kuestions.find({}).fetch();
+      var KuestionsFiltered = '';
+      if (Session.get('kuestionFilter')!=='') {
+        KuestionsFiltered = Kuestions.find(Session.get('kuestionFilter')).fetch();
+      }
+      return KuestionsFiltered;
     },
     kuestionsFieldNames: function() {
       var fields = Kuestions.findOne();
       return (fields) ? Object.keys(fields) : [];
     }
   });
-  Template.kuestionsModal.events({
+  /*Template.kuestionsModal.events({
     'click tr': selectRow,
     'keypress td': updateFn
-  });
+  });*/
 
 /*
   Template.admin_kuestions_by_test.helpers({

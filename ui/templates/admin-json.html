@@ -1,9 +1,21 @@
 <template name="admin_json">
   {{> navbar navbar="json"}}
   <form>
-    <div class="form-group">
-      <label class="col-sm-1 control-label">JSON File:</label>
+    <div class="form-group row">
+      <label for="testgroup" class="col-sm-1 control-label">Test Group:</label>
+      <input id="testgroup" class="col-sm-4" type="text" name="testgroup" />
+      <label class="col-sm-7">(El testGroup se creará si no existe)</label>
     </div>
-   {{> uploadJsonForm}}
+    <div class="form-group row">
+      <label for="testname" class="col-sm-1 control-label">Test Name:</label>
+      <input id="testname" class="col-sm-4" type="text" name="testname" />
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-1 control-label">Archivo JSON:</label>
+      {{> uploadJsonForm}}
+    </div>
+    <div class="form-group row">
+        <button type="button">Cargar JSON</button>
+    </div>
   </form>
 </template>

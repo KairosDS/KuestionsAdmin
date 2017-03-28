@@ -4,3 +4,5 @@
 
 .flag_es { background-image:url("/images/flags/es.png"); background-position:80px 20px; background-size: 30px 20px; background-repeat: no-repeat; } 
 .flag_en { background-image:url("/images/flags/en.png"); background-position:80px 20px; background-size: 30px 20px; background-repeat: no-repeat; }
+
+.element0, .element5 { display:none; }

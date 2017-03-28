@@ -1,39 +1,50 @@
 <template name="kuestionsModal">
-      <div class="row">
-    <div class="table-responsive">
-      <table class="table table-condensed table-hover">
-        <thead>
-          <tr>
-            {{#each kuestionsFieldNames}}
-            <th>{{this}}</th>
-            {{/each}}
-          </tr>
-        </thead>
-        <tbody>
-          {{#each kuestionsList}}
-          <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
-            <td>
-              <!--{{_id}}-->
-            </td>
-            <td contenteditable="true" data-field="test">{{test}}</td>
-            <td contenteditable="true" data-field="question">{{question}}</td>
-            <td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
-            <td>
-              <table class="table table-striped">
-                <tbody>
-                  {{#each answers}}
+  <div class="modal fade" id="kuestionsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Atención</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="table-responsive">
+              <table class="table table-condensed table-hover">
+                <thead>
                   <tr>
-                    <td contenteditable="true" data-field="text">{{text}}</td>
-                    <td contenteditable="true" data-field="value">{{value}}</td>
+                    {{#each kuestionsFieldNames}}
+                      <th class="element{{@index}}">{{this}}</th>
+                    {{/each}}
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each kuestionsList}}
+                  <tr id="{{_id}}" data-toggle="popover" data-placement="top" data-trigger="manual">
+                    <td class="element0">{{_id}}</td>
+                    <td contenteditable="true" data-field="test">{{test}}</td>
+                    <td contenteditable="true" data-field="question">{{question}}</td>
+                    <td contenteditable="true" data-field="codeExample">{{codeExample}}</td>
+                    <td>
+                      <table class="table table-striped">
+                        <tbody>
+                          {{#each answers}}
+                          <tr>
+                            <td contenteditable="true" data-field="text">{{text}}</td>
+                            <td contenteditable="true" data-field="value">{{value}}</td>
+                          </tr>
+                          {{/each}}
+                        </tbody>
+                      </table>
+                    </td>
+                    <td></td>
                   </tr>
                   {{/each}}
                 </tbody>
               </table>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
