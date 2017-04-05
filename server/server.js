@@ -208,7 +208,10 @@ if (Meteor.isServer) {
 
     deleteKcode: function(args) {
       var id = args.id;
-      return Kcode.remove({_id:id});
+      if (id !== '') {
+        //console.log('delete kcode ' + id);
+        return Kcode.remove({_id:id});
+      }
     },
 
     calcAllRankings: function(args) {
